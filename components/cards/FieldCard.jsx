@@ -11,13 +11,11 @@ export default function FieldCard() {
         style={styles.avatar}
       />
 
-      <Text style={styles.name}>Alex Johnson</Text>
-      <Text style={styles.role}>React Native Developer</Text>
+      <Text style={styles.name}>Field</Text>
+      <Text style={styles.role}>FieldRole</Text>
 
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>View Profile</Text>
-      </TouchableOpacity>
+
     </View>
   );
 }
