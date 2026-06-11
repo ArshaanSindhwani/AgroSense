@@ -36,7 +36,7 @@ async function addField(field) {
     });
 }
 
-async function deleteField(field) {
+async function deleteField(fieldId) {
   return firestore().collection("fields").doc(fieldId).delete();
 }
 
@@ -58,5 +58,33 @@ async function updateField(fieldId, updates) {
 }
 
 //Observations
+async function addObs(obs) {
+  return firestore()
+    .collection("observations")
+    .add({
+      ...obs,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    });
+}
+
+async function deleteObs(obsId) {
+  return firestore().collection("observations").doc(obsId).delete();
+}
+
+async function getObs(fieldId) {
+  const snapshot = await firestore()
+    .collection("observations")
+    // first fieldId refers to the column (field) within the observations table (collection)
+    // second fieldId refers to the documentId of the field we're asking about (it's the parameter of the function)
+    // so it's basically saying, where the documentId from fields matches the value stored in the column fieldId in observations.
+    .where("fieldId", "==", fieldId)
+    .orderBy("createdAt", "desc")
+    .get();
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+async function updateObs(obsId, updates) {
+  return firestore().collection("observations").doc(obsId).update(updates);
+}
 
 //Recommendations
