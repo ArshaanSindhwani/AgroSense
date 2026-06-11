@@ -42,7 +42,3 @@ export async function logoutUser() {
     throw new Error('Failed to log out. Please try again.');
   }
 }
-
-export function subscribeToAuthChanges(callback) {
-  return auth().onAuthStateChanged(callback);
-}
