@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "projectgamma",
     "name": "project-gamma",
     "slug": "project-gamma",
     "version": "1.0.0",
