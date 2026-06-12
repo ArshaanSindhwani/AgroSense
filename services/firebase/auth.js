@@ -1,32 +1,3 @@
-// mock functions to view the app on iPhone Expo Go
-
-// export async function registerUser(email, password) {
-//   if (!email || !password) {
-//     throw new Error('Please enter an email and password.');
-//   }
-
-//   return {
-//     uid: 'mock-user-id',
-//     email,
-//   };
-// }
-
-// export async function loginUser(email, password) {
-//   if (!email || !password) {
-//     throw new Error('Please enter your email and password.');
-//   }
-
-//   return {
-//     uid: 'mock-user-id',
-//     email,
-//   };
-// }
-
-// export async function logoutUser() {
-//   return true;
-// }
-
-// firebase connection
 
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore"

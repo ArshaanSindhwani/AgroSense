@@ -1,39 +1,3 @@
-// mock state to view the app on iPhone Expo Go 
-
-// import { createContext, useContext, useState } from 'react';
-
-// const AuthContext = createContext(null);
-
-// export function AuthProvider({ children }) {
-//   const [user, setUser] = useState(null);
-//   const [loading] = useState(false);
-
-//   async function login(email, password) {
-//     const mockUser = {
-//       uid: 'mock-user-id',
-//       email,
-//     };
-
-//     setUser(mockUser);
-//     return mockUser;
-//   }
-
-//   async function logout() {
-//     setUser(null);
-//   }
-
-//   return (
-//     <AuthContext.Provider value={{ user, loading, login, logout }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// }
-
-// export function useAuth() {
-//   return useContext(AuthContext);
-// }
-
-// firebase connection
 
 import {
   createContext,
