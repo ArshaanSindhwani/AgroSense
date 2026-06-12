@@ -23,7 +23,7 @@ export default function LoginScreen() {
 
             <View style={styles.register}>
               <Text style={styles.registerText}>Don't have an account?</Text>
-              <Link href='/register' asChild>
+              <Link href="/(auth)/register" asChild>
                 <TouchableOpacity>
                   <Text style={styles.registerLink}>Register</Text>
                 </TouchableOpacity>
