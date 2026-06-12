@@ -17,7 +17,7 @@ export default function AddFarmScreen() {
         location: data.location,
         size: data.size ? { value: parseFloat(data.size), unit: data.unit } : null,
       });
-      router.back();
+      router.replace("/(tabs)/fields");
     } catch (err) {
       console.error("Failed to add farm:", err);
     } finally {

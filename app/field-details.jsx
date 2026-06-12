@@ -44,7 +44,7 @@ export default function FieldDetailsScreen() {
             try {
               await deleteField(fieldId);
               await refresh();
-              router.back();
+              router.replace("/(tabs)/fields");
             } catch (err) {
               Alert.alert("Error", err.message || "Could not delete field. Please try again.");
               setDeleting(false);

@@ -41,7 +41,7 @@ export default function AddObservationScreen() {
         recordedAt: new Date().toISOString(),
       });
       await refresh();
-      router.back();
+      router.replace("/(tabs)/observations");
     } catch (err) {
       Alert.alert("Error", err.message || "Could not save observation.");
     } finally {

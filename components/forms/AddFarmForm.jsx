@@ -125,7 +125,7 @@ const validate = () => {
 
         <TouchableOpacity
           style={styles.cancelButton}
-          onPress={() => router.back()}
+          onPress={() => router.replace("/(tabs)/addFarm")}
           activeOpacity={0.7}
         >
           <Text style={styles.cancelText}>Cancel</Text>

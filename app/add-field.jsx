@@ -22,7 +22,7 @@ export default function AddFieldScreen() {
       }
       await addField({ ...data, farmId });
       await refresh();
-      router.back();
+      router.replace("/(tabs)/fields");
     } catch (err) {
       Alert.alert("Error", err.message || "Could not save field. Please try again.");
     } finally {
