@@ -105,3 +105,9 @@ async function getFieldRecommendations(fieldId) {
     .get();
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
+
+export {
+  addField, addObs, addRecommendation, createUser, deleteField, deleteObs, deleteUser, getAllFields,
+  getField, getFieldRecommendations, getObs, getUser, updateField, updateObs, updateUser
+};
+
