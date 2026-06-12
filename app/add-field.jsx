@@ -3,17 +3,23 @@ import { useRouter } from "expo-router";
 
 import { AddFieldForm } from "../components/forms/AddFieldForm";
 import { useFarmContext } from "../context/FarmContext";
-import { addField } from "../services/firebase/firestore";
+import { useAuthContext } from "../context/AuthContext";
+import { addFarm, addField } from "../services/firebase/firestore";
 
 export default function AddFieldScreen() {
   const router = useRouter();
   const { farms, refresh } = useFarmContext();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async ({ farmName, ...data }) => {
     setLoading(true);
     try {
-      await addField(data);
+      let farmId = data.farmId;
+      if (!farmId && farmName) {
+        farmId = await addFarm(user.uid, { name: farmName });
+      }
+      await addField({ ...data, farmId });
       await refresh();
       router.back();
     } catch (err) {

@@ -18,15 +18,19 @@ const UK_CROPS = [
 
 export function AddFieldForm({ farms, onSubmit, loading }) {
   const [name, setName] = useState("");
+  const [farmName, setFarmName] = useState("");
   const [cropType, setCropType] = useState("");
   const [areaAcres, setAreaAcres] = useState("");
   const [selectedFarmId, setSelectedFarmId] = useState(farms?.[0]?.id || "");
   const [errors, setErrors] = useState({});
 
+  const noFarms = !farms || farms.length === 0;
+
   const validate = () => {
     const e = {};
     if (!name.trim()) e.name = "Field name is required";
-    if (!selectedFarmId) e.farm = "Select a farm";
+    if (noFarms && !farmName.trim()) e.farmName = "Farm name is required";
+    if (!noFarms && !selectedFarmId) e.farm = "Select a farm";
     if (areaAcres && isNaN(parseFloat(areaAcres))) e.areaAcres = "Must be a number";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -36,24 +40,30 @@ export function AddFieldForm({ farms, onSubmit, loading }) {
     if (!validate()) return;
     onSubmit({
       name: name.trim(),
+      farmName: noFarms ? farmName.trim() : null,
       cropType: cropType.trim(),
       areaAcres: areaAcres ? parseFloat(areaAcres) : null,
       farmId: selectedFarmId,
     });
   };
 
-  if (!farms || farms.length === 0) {
-    return (
-      <View style={styles.noFarm}>
-        <Text style={styles.noFarmText}>
-          You need to create a farm before adding fields.
-        </Text>
-      </View>
-    );
-  }
-
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      {(!farms || farms.length === 0) && (
+        <View style={styles.field}>
+          <Text style={styles.label}>Farm Name *</Text>
+          <TextInput
+            style={[styles.input, errors.farmName && styles.inputError]}
+            placeholder="e.g. Green Acres Farm"
+            placeholderTextColor={theme.colours.mutedText}
+            value={farmName}
+            onChangeText={setFarmName}
+          />
+          {errors.farmName && <Text style={styles.error}>{errors.farmName}</Text>}
+          <Text style={styles.hint}>You'll be able to add more farms later</Text>
+        </View>
+      )}
+
       <View style={styles.field}>
         <Text style={styles.label}>Field Name *</Text>
         <TextInput
@@ -240,15 +250,9 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.body,
     fontWeight: "700",
   },
-  noFarm: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: theme.spacing.xl,
-  },
-  noFarmText: {
-    fontSize: theme.fontSize.body,
+  hint: {
+    fontSize: theme.fontSize.small,
     color: theme.colours.mutedText,
-    textAlign: "center",
+    marginTop: 4,
   },
 });
