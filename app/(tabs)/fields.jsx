@@ -52,7 +52,6 @@ export default function FieldsScreen() {
         contentContainerStyle={
           fields.length === 0 ? styles.emptyContainer : styles.list
         }
-        ListHeaderComponent={<Text style={styles.heading}>Your Fields</Text>}
         ListEmptyComponent={
           <View style={styles.empty}>
             <Ionicons name="leaf-outline" size={48} color={theme.colours.mutedText} />
@@ -91,12 +90,6 @@ const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
     padding: theme.spacing.md,
-  },
-  heading: {
-    fontSize: theme.fontSize.subtitle,
-    fontWeight: "700",
-    color: theme.colours.text,
-    marginBottom: theme.spacing.md,
   },
   empty: {
     flex: 1,
