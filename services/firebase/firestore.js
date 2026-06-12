@@ -82,7 +82,6 @@ async function getObs(fieldId) {
   const snapshot = await firestore()
     .collection("observations")
     .where("fieldId", "==", fieldId)
-    .orderBy("createdAt", "desc")
     .get();
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
