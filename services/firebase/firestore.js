@@ -88,3 +88,20 @@ async function updateObs(obsId, updates) {
 }
 
 //Recommendations
+async function addRecommendation(recommendation) {
+  return firestore()
+    .collection("recommendations")
+    .add({
+      ...recommendation,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    });
+}
+
+async function getFieldRecommendations(fieldId) {
+  const snapshot = await firestore()
+    .collection("recommendations")
+    .where("fieldId", "==", fieldId)
+    .orderBy("createdAt", "desc")
+    .get();
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
