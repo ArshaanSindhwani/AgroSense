@@ -11,11 +11,11 @@ import { useAuthContext } from "../../context/AuthContext";
 // Currently I'm assuming this function exists as auth is not done yet
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../constants/theme";
-import { logoutUser } from "../../services/firebase/auth";
+// import { logoutUser } from "../../services/firebase/auth";
 
 export default function SettingsScreen() {
   // const router = useRouter();
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
 
   const handleLogout = () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -25,7 +25,7 @@ export default function SettingsScreen() {
         style: "destructive",
         onPress: async () => {
           try {
-            await logoutUser();
+            await logout();
           } catch (error) {
             console.log("Failed to logout:", error);
           }
