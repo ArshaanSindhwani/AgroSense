@@ -4,18 +4,66 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
 import { useAuthContext } from "../../context/AuthContext";
-// Currently I'm assuming this function exists as auth is not done yet
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../constants/theme";
-// import { logoutUser } from "../../services/firebase/auth";
+
+import { getCoordinatesFromPostcode } from "../../services/external/coordinateService";
+import { getWeatherData } from "../../services/external/weatherService";
+import { getSoilData } from "../../services/external/soilService";
+import { createAgroPolygon } from "../../services/external/agroMonitoringService";
+import { generateRecommendation } from "../../services/ai/recommendationService";
 
 export default function SettingsScreen() {
-  // const router = useRouter();
   const { user, logout } = useAuthContext();
+
+  async function testApis() {
+    try {
+      const coordinates = await getCoordinatesFromPostcode("UB4 8SH");
+      console.log("Coordinates:", coordinates);
+
+      const weather = await getWeatherData(
+        coordinates.latitude,
+        coordinates.longitude
+      );
+      console.log("Weather:", weather);
+
+      const soil = await getSoilData(
+        coordinates.latitude,
+        coordinates.longitude,
+        "Clay"
+      );
+      console.log("Soil:", soil);
+
+      const agro = await createAgroPolygon(
+        "Test Field",
+        coordinates.latitude,
+        coordinates.longitude
+      );
+      console.log("AgroMonitoring:", agro);
+
+      const recommendation = await generateRecommendation({
+        fieldName: "Test Field",
+        cropType: "Wheat",
+        growthStage: "Early growth",
+        pestSightings: "Aphids",
+        diseaseSightings: "None",
+        notes: "Leaves look slightly yellow.",
+        weatherData: weather,
+        soilData: soil,
+      });
+
+      console.log("Gemini recommendation:", recommendation);
+
+      Alert.alert("API test complete", "Check the Metro terminal logs.");
+    } catch (error) {
+      console.log("API test failed:", error.message);
+      Alert.alert("API test failed", error.message);
+    }
+  }
 
   const handleLogout = () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -40,7 +88,9 @@ export default function SettingsScreen() {
         <View style={styles.iconContainer}>
           <Ionicons name="person" size={32} color={theme.colours.primary} />
         </View>
+
         <Text style={styles.name}>{user?.displayName || "Farmer"}</Text>
+
         {!!user?.email && <Text style={styles.email}>{user.email}</Text>}
       </View>
 
@@ -50,12 +100,22 @@ export default function SettingsScreen() {
           label="Email"
           value={user?.email || "—"}
         />
+
         <SettingsRow
           icon="key-outline"
           label="User ID"
           value={user?.uid ? `${user.uid.slice(0, 8)}…` : "—"}
         />
       </View>
+
+      <TouchableOpacity
+        style={styles.testButton}
+        onPress={testApis}
+        activeOpacity={0.85}
+      >
+        <Ionicons name="flask-outline" size={18} color="#FFFFFF" />
+        <Text style={styles.testButtonText}>Test APIs</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.logoutButton}
@@ -67,6 +127,7 @@ export default function SettingsScreen() {
           size={18}
           color={theme.colours.danger}
         />
+
         <Text style={styles.logoutText}>Log out</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -82,7 +143,9 @@ function SettingsRow({ icon, label, value }) {
         color={theme.colours.mutedText}
         style={styles.rowIcon}
       />
+
       <Text style={styles.rowLabel}>{label}</Text>
+
       <Text style={styles.rowValue}>{value}</Text>
     </View>
   );
@@ -147,13 +210,29 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: theme.colours.text,
   },
-  logoutButton: {
+  testButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: theme.spacing.sm,
     margin: theme.spacing.md,
     marginTop: theme.spacing.lg,
+    padding: theme.spacing.md,
+    borderRadius: theme.radius.md,
+    backgroundColor: theme.colours.primary,
+  },
+  testButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "600",
+    fontSize: theme.fontSize.body,
+  },
+  logoutButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: theme.spacing.sm,
+    margin: theme.spacing.md,
+    marginTop: theme.spacing.sm,
     padding: theme.spacing.md,
     borderRadius: theme.radius.md,
     borderWidth: 1,
