@@ -9,7 +9,7 @@ import { theme } from "../constants/theme";
 function RootLayoutNav() {
   const { user, loading } = useAuthContext();
 
-  if (loading) return null;
+  if (loading) return <FullScreenSpinner />;
 
   return (
     <Stack
@@ -23,9 +23,10 @@ function RootLayoutNav() {
         },
       }}
     >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="add-field" options={{ title: "Add Field" }} />
       <Stack.Screen name="add-observation" options={{ title: "Add Observation" }} />
       <Stack.Screen name="field-details" options={{ title: "Field Details" }} />

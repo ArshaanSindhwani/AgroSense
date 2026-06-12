@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> e140c5fcb2eb0bc5f393e6b5a185b7dee9c6f497
 import {
   createContext,
   useContext,

@@ -18,7 +18,7 @@ export default function RegisterScreen() {
                 <View style={styles.register}>
                   <Text style={styles.title}>Create your account</Text>
                   <Text style={styles.subtitle}>Sign up to get started</Text>
-                  <LoginForm />
+                  <RegisterForm />
                 </View>
     
                 <View style={styles.login}>
