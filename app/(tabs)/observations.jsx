@@ -11,10 +11,10 @@ import {
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useFarmContext } from "@/context/FarmContext";
-import { getObs, deleteObs } from "@/services/firebase/firestore";
-import { ObservationCard } from "@/components/cards/ObservationCard";
-import { theme } from "@/constants/theme";
+import { useFarmContext } from "../../context/FarmContext";
+import { getObs, deleteObs } from "../../services/firebase/firestore";
+import { ObservationCard } from "../../components/cards/ObservationCard";
+import { theme } from "../../constants/theme";
 
 export default function ObservationsScreen() {
   const { fields, loading: fieldsLoading } = useFarmContext();

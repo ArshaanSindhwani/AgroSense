@@ -3,11 +3,11 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useFarmContext } from "@/context/FarmContext";
-import { useAuthContext } from "@/context/AuthContext";
-import { addObs } from "@/services/firebase/firestore";
-import { ObservationForm } from "@/components/forms/ObservationForm";
-import { theme } from "@/constants/theme";
+import { useFarmContext } from "../context/FarmContext";
+import { useAuthContext } from "../context/AuthContext";
+import { addObs } from "../services/firebase/firestore";
+import { ObservationForm } from "../components/forms/ObservationForm";
+import { theme } from "../constants/theme";
 
 export default function AddObservationScreen() {
   const { fields, refresh } = useFarmContext();
