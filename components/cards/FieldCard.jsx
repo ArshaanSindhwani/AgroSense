@@ -1,51 +1,62 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
+import { theme } from "../../constants/theme";
 
-
-export default function FieldCard({field}) {
+export function FieldCard({ field, onPress }) {
   return (
-    <View style={styles.card}>
-      <Text style={styles.fieldName}>{field.name}</Text>
-
-      <Text style={styles.info}>{field.crop}</Text>
-      <Text style={styles.info}>{field.area} ha</Text>
-      <Text style={styles.info}>{field.status}</Text>
-
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>View Field</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+      <View style={styles.iconContainer}>
+        <Ionicons name="leaf" size={22} color={theme.colours.primary} />
+      </View>
+      <View style={styles.info}>
+        <Text style={styles.name}>{field.name}</Text>
+        <Text style={styles.crop}>{field.cropType || "No crop set"}</Text>
+        {!!field.areaAcres && (
+          <Text style={styles.area}>{field.areaAcres} acres</Text>
+        )}
+      </View>
+      <Ionicons name="chevron-forward" size={20} color={theme.colours.mutedText} />
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 20,
-    margin: 16,
-    elevation: 4,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: theme.colours.card,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+    borderWidth: 1,
+    borderColor: theme.colours.border,
   },
-  fieldName: {
-    fontSize: 22,
-    fontWeight: '700',
-    marginBottom: 12,
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colours.background,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: theme.spacing.md,
   },
   info: {
-    fontSize: 16,
-    marginBottom: 6,
-    color: '#555',
+    flex: 1,
   },
-  button: {
-    marginTop: 16,
-    backgroundColor: '#2E7D32',
-    padding: 12,
-    borderRadius: 10,
-    alignItems: 'center',
+  name: {
+    fontSize: theme.fontSize.body,
+    fontWeight: "600",
+    color: theme.colours.text,
+    marginBottom: 2,
   },
-  buttonText: {
-    color: '#fff',
-    fontWeight: '600',
+  crop: {
+    fontSize: theme.fontSize.small,
+    color: theme.colours.mutedText,
+  },
+  area: {
+    fontSize: theme.fontSize.small,
+    color: theme.colours.mutedText,
+    marginTop: 2,
   },
 });

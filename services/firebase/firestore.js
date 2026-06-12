@@ -1,14 +1,11 @@
 import firestore from "@react-native-firebase/firestore";
 
-//Users
+// Users
 async function createUser(userId, profile) {
   return firestore()
     .collection("users")
     .doc(userId)
-    .set({
-      ...profile,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-    });
+    .set({ ...profile, createdAt: firestore.FieldValue.serverTimestamp() });
 }
 
 async function deleteUser(userId) {
@@ -24,47 +21,57 @@ async function updateUser(userId, updates) {
   return firestore().collection("users").doc(userId).update(updates);
 }
 
-//Farms
+// Farms
+async function addFarm(userId, data) {
+  const ref = await firestore()
+    .collection("farms")
+    .add({ ...data, userId, createdAt: firestore.FieldValue.serverTimestamp() });
+  return ref.id;
+}
 
-//Fields
+async function getFarmsByUser(userId) {
+  const snap = await firestore()
+    .collection("farms")
+    .where("userId", "==", userId)
+    .get();
+  return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
+
+// Fields
 async function addField(field) {
-  return firestore()
+  const ref = await firestore()
     .collection("fields")
-    .add({
-      ...field,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-    });
+    .add({ ...field, createdAt: firestore.FieldValue.serverTimestamp() });
+  return ref.id;
 }
 
 async function deleteField(fieldId) {
   return firestore().collection("fields").doc(fieldId).delete();
 }
 
-async function getAllFields(userId) {
-  const snapshot = await firestore()
+async function getFieldsByFarmIds(farmIds) {
+  if (!farmIds.length) return [];
+  const snap = await firestore()
     .collection("fields")
-    .where("owner", "==", userId)
+    .where("farmId", "in", farmIds)
     .get();
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 
 async function getField(fieldId) {
   const doc = await firestore().collection("fields").doc(fieldId).get();
-  return { id: doc.id, ...doc.data };
+  return { id: doc.id, ...doc.data() };
 }
 
 async function updateField(fieldId, updates) {
   return firestore().collection("fields").doc(fieldId).update(updates);
 }
 
-//Observations
+// Observations
 async function addObs(obs) {
   return firestore()
     .collection("observations")
-    .add({
-      ...obs,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-    });
+    .add({ ...obs, createdAt: firestore.FieldValue.serverTimestamp() });
 }
 
 async function deleteObs(obsId) {
@@ -74,9 +81,6 @@ async function deleteObs(obsId) {
 async function getObs(fieldId) {
   const snapshot = await firestore()
     .collection("observations")
-    // first fieldId refers to the column (field) within the observations table (collection)
-    // second fieldId refers to the documentId of the field we're asking about (it's the parameter of the function)
-    // so it's basically saying, where the documentId from fields matches the value stored in the column fieldId in observations.
     .where("fieldId", "==", fieldId)
     .orderBy("createdAt", "desc")
     .get();
@@ -87,14 +91,11 @@ async function updateObs(obsId, updates) {
   return firestore().collection("observations").doc(obsId).update(updates);
 }
 
-//Recommendations
+// Recommendations
 async function addRecommendation(recommendation) {
   return firestore()
     .collection("recommendations")
-    .add({
-      ...recommendation,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-    });
+    .add({ ...recommendation, createdAt: firestore.FieldValue.serverTimestamp() });
 }
 
 async function getFieldRecommendations(fieldId) {
@@ -107,7 +108,9 @@ async function getFieldRecommendations(fieldId) {
 }
 
 export {
-  addField, addObs, addRecommendation, createUser, deleteField, deleteObs, deleteUser, getAllFields,
-  getField, getFieldRecommendations, getObs, getUser, updateField, updateObs, updateUser
+  addFarm, getFarmsByUser,
+  addField, deleteField, getFieldsByFarmIds, getField, updateField,
+  addObs, deleteObs, getObs, updateObs,
+  addRecommendation, getFieldRecommendations,
+  createUser, deleteUser, getUser, updateUser,
 };
-
