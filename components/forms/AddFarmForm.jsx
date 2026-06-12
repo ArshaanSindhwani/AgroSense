@@ -21,14 +21,17 @@ export function AddFarmForm({ onSubmit, loading }) {
   const [unit, setUnit] = useState("ha");
   const [errors, setErrors] = useState({});
 
-  const validate = () => {
-    const next = {};
-    if (!name.trim()) next.name = "Farm name is required.";
-    if (!location.trim()) next.location = "Location is required.";
-    if (size && isNaN(Number(size))) next.size = "Size must be a number.";
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  };
+const UK_POSTCODE_REGEX = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+
+const validate = () => {
+  const next = {};
+  if (!name.trim()) next.name = "Farm name is required.";
+  if (!location.trim()) next.location = "Postcode is required.";
+  else if (!UK_POSTCODE_REGEX.test(location.trim())) next.location = "Enter a valid UK postcode.";
+  if (size && isNaN(Number(size))) next.size = "Size must be a number.";
+  setErrors(next);
+  return Object.keys(next).length === 0;
+};
 
   const handleSubmit = () => {
     if (!validate()) return;
@@ -62,15 +65,16 @@ export function AddFarmForm({ onSubmit, loading }) {
 
         {/* Location */}
         <View style={styles.fieldGroup}>
-          <Text style={styles.label}>Location</Text>
-          <TextInput
+       <Text style={styles.label}>Postcode</Text>
+            <TextInput
             style={[styles.input, errors.location && styles.inputError]}
-            placeholder="e.g. Somerset, UK"
+            placeholder="e.g. TA1 3LT"
             placeholderTextColor={theme.colours.mutedText}
             value={location}
             onChangeText={(t) => { setLocation(t); setErrors((e) => ({ ...e, location: undefined })); }}
+            autoCapitalize="characters"
             returnKeyType="next"
-          />
+            />
           {errors.location && <Text style={styles.errorText}>{errors.location}</Text>}
         </View>
 
