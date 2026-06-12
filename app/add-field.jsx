@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 
 import { AddFieldForm } from "../components/forms/AddFieldForm";
@@ -23,7 +24,7 @@ export default function AddFieldScreen() {
       await refresh();
       router.back();
     } catch (err) {
-      console.error("Failed to add field:", err);
+      Alert.alert("Error", err.message || "Could not save field. Please try again.");
     } finally {
       setLoading(false);
     }
