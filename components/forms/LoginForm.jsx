@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { router } from "expo-router";
 import {
   StyleSheet,
   Text,
@@ -6,11 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { useAuthContext } from "../../context/AuthContext.jsx";
 import { InlineSpinner } from "../shared/LoadingSpinner";
 
 export default function LoginForm() {
-  const { login, error } = useAuthContext();
+  const { login } = useAuthContext();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -27,6 +30,7 @@ export default function LoginForm() {
     try {
       setLoading(true);
       await login(email.trim(), password);
+      router.replace("/(tabs)/addFarm");
     } catch (error) {
       setErrorMessage(error.message);
     } finally {

@@ -1,13 +1,13 @@
-import { Stack, Redirect } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { AuthProvider, useAuthContext } from "../context/AuthContext";
 import { FarmProvider } from "../context/FarmContext";
-import{ FullScreenSpinner } from "../components/shared/LoadingSpinner"
+import { FullScreenSpinner } from "../components/shared/LoadingSpinner";
 import { theme } from "../constants/theme";
 
 function RootLayoutNav() {
-  const { user, loading } = useAuthContext();
+  const { loading } = useAuthContext();
 
   if (loading) return <FullScreenSpinner />;
 
