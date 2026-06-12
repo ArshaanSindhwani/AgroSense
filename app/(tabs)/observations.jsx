@@ -31,7 +31,11 @@ export default function ObservationsScreen() {
     setError(null);
     try {
       const results = await Promise.all(fields.map((f) => getObs(f.id)));
-      setObservations(results.flat());
+      const flat = results.flat().sort((a, b) => {
+        const toMs = (ts) => (ts?.seconds ? ts.seconds * 1000 : ts ? new Date(ts).getTime() : 0);
+        return toMs(b.createdAt) - toMs(a.createdAt);
+      });
+      setObservations(flat);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -100,7 +104,7 @@ export default function ObservationsScreen() {
           <ObservationCard
             observation={item}
             fieldName={getFieldName(item.fieldId)}
-            onPress={() => confirmDelete(item)}
+            onDelete={() => confirmDelete(item)}
           />
         )}
         ListEmptyComponent={

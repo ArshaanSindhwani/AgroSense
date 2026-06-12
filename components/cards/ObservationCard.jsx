@@ -10,11 +10,11 @@ const GROWTH_ICONS = {
   Harvest: "basket-outline",
 };
 
-export function ObservationCard({ observation, fieldName, onPress }) {
+export function ObservationCard({ observation, fieldName, onDelete }) {
   const icon = GROWTH_ICONS[observation.growthStage] ?? "eye-outline";
 
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+    <View style={styles.card}>
       <View style={styles.iconContainer}>
         <Ionicons name={icon} size={22} color={theme.colours.primary} />
       </View>
@@ -37,12 +37,12 @@ export function ObservationCard({ observation, fieldName, onPress }) {
           </Text>
         )}
       </View>
-      <Ionicons
-        name="chevron-forward"
-        size={20}
-        color={theme.colours.mutedText}
-      />
-    </TouchableOpacity>
+      {!!onDelete && (
+        <TouchableOpacity onPress={onDelete} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+          <Ionicons name="trash-outline" size={20} color={theme.colours.danger} />
+        </TouchableOpacity>
+      )}
+    </View>
   );
 }
 
