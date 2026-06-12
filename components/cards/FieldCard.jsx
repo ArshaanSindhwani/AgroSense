@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function FieldCard() {
+
+
+export default function FieldCard({field}) {
   return (
     <View style={styles.card}>
-      <Text style={styles.fieldName}>North Field</Text>
+      <Text style={styles.fieldName}>{field.name}</Text>
 
-      <Text style={styles.info}>Crop: Wheat</Text>
-      <Text style={styles.info}>Area: 12.5 hectares</Text>
-      <Text style={styles.info}>Status: Healthy</Text>
+      <Text style={styles.info}>{field.crop}</Text>
+      <Text style={styles.info}>{field.area} ha</Text>
+      <Text style={styles.info}>{field.status}</Text>
 
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>View Field</Text>
