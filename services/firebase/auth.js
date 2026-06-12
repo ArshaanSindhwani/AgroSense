@@ -1,8 +1,40 @@
-import auth from '@react-native-firebase/auth';
+// mock functions to view the app on iPhone Expo Go
+
+// export async function registerUser(email, password) {
+//   if (!email || !password) {
+//     throw new Error('Please enter an email and password.');
+//   }
+
+//   return {
+//     uid: 'mock-user-id',
+//     email,
+//   };
+// }
+
+// export async function loginUser(email, password) {
+//   if (!email || !password) {
+//     throw new Error('Please enter your email and password.');
+//   }
+
+//   return {
+//     uid: 'mock-user-id',
+//     email,
+//   };
+// }
+
+// export async function logoutUser() {
+//   return true;
+// }
+
+// firebase connection
+
+import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from '@react-native-firebase/auth'
+
+const auth =getAuth()
 
 export async function registerUser(email, password) {
   try {
-    await auth().createUserWithEmailAndPassword(email, password);
+    await createUserWithEmailAndPassword(auth, email, password);
     return 'User successfully created!'
   } catch (error) {
     switch (error.code) {
@@ -18,7 +50,7 @@ export async function registerUser(email, password) {
 
 export async function loginUser(email, password) {
   try {
-    await auth().signInWithEmailAndPassword(email, password);
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     switch (error.code) {
       case 'auth/user-not-found':
@@ -37,7 +69,7 @@ export async function loginUser(email, password) {
 
 export async function logoutUser() {
   try {
-    await auth().signOut();
+    await signOut(auth);
   } catch (error) {
     throw new Error('Failed to log out. Please try again.');
   }
