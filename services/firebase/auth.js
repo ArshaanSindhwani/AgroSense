@@ -3,11 +3,13 @@ import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sig
 import firestore from "@react-native-firebase/firestore"
 
 const auth =getAuth()
+// import auth from "@react-native-firebase/auth";
+// import firestore from "@react-native-firebase/firestore";
 
 export async function registerUser(email, password) {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth, email.trim(),
+    const userCredential = await auth().createUserWithEmailAndPassword(
+      email.trim(),
       password
     );
 
@@ -38,7 +40,7 @@ export async function registerUser(email, password) {
 
 export async function loginUser(email, password) {
   try {
-    await signInWithEmailAndPassword(auth, email.trim(), password);
+    await auth().signInWithEmailAndPassword(email.trim(), password);
   } catch (error) {
     switch (error.code) {
       case "auth/user-not-found":
@@ -57,7 +59,7 @@ export async function loginUser(email, password) {
 
 export async function logoutUser() {
   try {
-    await signOut(auth);
+    await auth().signOut();
   } catch (error) {
     throw new Error("Failed to log out. Please try again.");
   }

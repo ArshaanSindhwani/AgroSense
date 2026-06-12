@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> e140c5fcb2eb0bc5f393e6b5a185b7dee9c6f497
 import {
   createContext,
   useContext,
@@ -6,24 +9,26 @@ import {
   useState,
 } from "react";
 
-import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
-import { loginUser, registerUser, logoutUser } from '../services/firebase/auth';
+import auth from "@react-native-firebase/auth";
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+} from "../services/firebase/auth";
 
-const auth = getAuth();
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, currentUser => {
-        console.log('Auth state changed:', currentUser)
-        setUser(currentUser);
-        setLoading(false);
-      }
-    );
+    const unsubscribe = auth().onAuthStateChanged((currentUser) => {
+      console.log("Auth state changed:", currentUser);
+      setUser(currentUser);
+      setLoading(false);
+    });
 
     return unsubscribe;
   }, []);
@@ -34,6 +39,7 @@ export function AuthProvider({ children }) {
       await loginUser(email, password);
     } catch (err) {
       setError(err.message);
+      throw err;
     }
   }
 
@@ -43,6 +49,7 @@ export function AuthProvider({ children }) {
       await registerUser(email, password);
     } catch (err) {
       setError(err.message);
+      throw err;
     }
   }
 
@@ -52,12 +59,14 @@ export function AuthProvider({ children }) {
       await logoutUser();
     } catch (err) {
       setError(err.message);
+      throw err;
     }
   }
 
   const value = {
     user,
     loading,
+    error,
     isAuthenticated: !!user,
     login,
     register,
@@ -75,9 +84,7 @@ export function useAuthContext() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error(
-      "useAuthContext must be used within AuthProvider"
-    );
+    throw new Error("useAuthContext must be used within AuthProvider");
   }
 
   return context;
