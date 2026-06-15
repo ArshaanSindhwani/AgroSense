@@ -9,6 +9,9 @@ import { addObs } from "../services/firebase/firestore";
 import { ObservationForm } from "../components/forms/ObservationForm";
 import { theme } from "../constants/theme";
 
+import { isOnline } from "../services/offline/networkStatus";
+import { addToSyncQueue } from "../services/offline/syncQueue";
+
 export default function AddObservationScreen() {
   const { fields, refresh } = useFarmContext();
   const { user } = useAuthContext();
@@ -18,10 +21,13 @@ export default function AddObservationScreen() {
     return (
       <View style={styles.noFields}>
         <Ionicons name="leaf-outline" size={48} color={theme.colours.border} />
+
         <Text style={styles.noFieldsTitle}>No fields yet</Text>
+
         <Text style={styles.noFieldsSubtitle}>
           Add a field before recording an observation.
         </Text>
+
         <TouchableOpacity
           style={styles.goButton}
           onPress={() => router.replace("/(tabs)/fields")}
@@ -34,13 +40,30 @@ export default function AddObservationScreen() {
 
   async function handleSubmit(data) {
     setLoading(true);
+
+    const observationData = {
+      ...data,
+      userId: user.uid,
+      recordedAt: new Date().toISOString(),
+    };
+
     try {
-      await addObs({
-        ...data,
-        userId: user.uid,
-        recordedAt: new Date().toISOString(),
-      });
-      await refresh();
+      const online = await isOnline();
+
+      if (online) {
+        await addObs(observationData);
+        await refresh();
+
+        Alert.alert("Saved", "Observation saved successfully.");
+      } else {
+        await addToSyncQueue("CREATE_OBSERVATION", observationData);
+
+        Alert.alert(
+          "Saved offline",
+          "You are offline, so this observation will sync when your internet returns."
+        );
+      }
+
       router.replace("/(tabs)/observations");
     } catch (err) {
       Alert.alert("Error", err.message || "Could not save observation.");
@@ -51,7 +74,11 @@ export default function AddObservationScreen() {
 
   return (
     <View style={styles.container}>
-      <ObservationForm fields={fields} onSubmit={handleSubmit} loading={loading} />
+      <ObservationForm
+        fields={fields}
+        onSubmit={handleSubmit}
+        loading={loading}
+      />
     </View>
   );
 }

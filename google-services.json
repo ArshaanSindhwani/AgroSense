@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "661580230444",
+    "project_id": "project-gamma-6d25a",
+    "storage_bucket": "project-gamma-6d25a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661580230444:android:509be74335583850190689",
+        "android_client_info": {
+          "package_name": "com.projectgamma.agrosense"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6sQIFCr4cesVD1LB2yJByqLNOa05l3sw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
