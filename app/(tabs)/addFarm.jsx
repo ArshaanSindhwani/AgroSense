@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { AddFarmForm } from "../../components/forms/AddFarmForm";
 import { useAuthContext } from "../../context/AuthContext";
 import { addFarm } from "../../services/firebase/firestore";
+import {useThemeColor} from "../../hooks/useColorScheme"
 
 export default function AddFarmScreen() {
   const router = useRouter();
