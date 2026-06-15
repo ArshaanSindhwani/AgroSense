@@ -12,8 +12,8 @@ import {
 import RecommendationCard from "../../components/cards/RecommendationCard";
 import { theme } from "../../constants/theme";
 import { useFarmContext } from "../../context/FarmContext";
-import { getObs } from "../../services/firebase/firestore";
 import { generateRecommendation } from "../../services/ai/recommendationService";
+import { getObs } from "../../services/firebase/firestore";
 
 export default function RecommendationsScreen() {
   const [loading, setLoading] = useState(false);
@@ -62,17 +62,19 @@ export default function RecommendationsScreen() {
         return;
       }
 
-      const field = fields.find((item) => item.id === latestObservation.fieldId);
+      const field = fields.find(
+        (item) => item.id === latestObservation.fieldId,
+      );
 
       const result = await generateRecommendation({
         fieldName: field?.name,
         cropType: field?.cropType,
         growthStage: latestObservation.growthStage,
-        pestSightings: latestObservation.pestSightings,
-        diseaseSightings: latestObservation.diseaseSightings,
+        pestSightings: latestObservation.pestSighting,
+        diseaseSightings: latestObservation.diseaseSighting,
         notes: latestObservation.notes,
-        weatherData: latestObservation.weatherData,
-        soilData: latestObservation.soilData,
+        weatherData: latestObservation.weatherData || field?.weatherData,
+        soilData: latestObservation.soilData || field?.soilData,
       });
 
       setRecommendation(result);
@@ -89,7 +91,8 @@ export default function RecommendationsScreen() {
         <Text style={styles.title}>Recommendations</Text>
 
         <Text style={styles.subtitle}>
-          Generate a practical recommendation using your latest observation.
+          Generate a practical recommendation using your latest observation and
+          field data.
         </Text>
 
         <Pressable
