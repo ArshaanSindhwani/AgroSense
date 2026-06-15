@@ -52,7 +52,6 @@ export default function AddObservationScreen() {
 
       if (online) {
         await addObs(observationData);
-        await refresh();
 
         Alert.alert("Saved", "Observation saved successfully.");
       } else {
@@ -64,6 +63,7 @@ export default function AddObservationScreen() {
         );
       }
 
+      await refresh();
       router.replace("/(tabs)/observations");
     } catch (err) {
       Alert.alert("Error", err.message || "Could not save observation.");
