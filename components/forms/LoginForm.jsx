@@ -47,6 +47,7 @@ export default function LoginForm() {
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#52796F"
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
@@ -56,6 +57,7 @@ export default function LoginForm() {
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#52796F"
         value={password}
         onChangeText={setPassword}
         secureTextEntry

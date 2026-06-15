@@ -12,13 +12,24 @@ import {
 import { theme } from "../../constants/theme";
 
 const UK_CROPS = [
-  "Wheat", "Barley", "Oilseed Rape", "Potatoes", "Sugar Beet",
-  "Maize", "Oats", "Field Beans", "Peas", "Rye", "Other",
+  "Wheat",
+  "Barley",
+  "Oilseed Rape",
+  "Potatoes",
+  "Sugar Beet",
+  "Maize",
+  "Oats",
+  "Field Beans",
+  "Peas",
+  "Rye",
+  "Other",
 ];
 
 export function AddFieldForm({ farms, onSubmit, loading }) {
   const [name, setName] = useState("");
   const [farmName, setFarmName] = useState("");
+  const [postcode, setPostcode] = useState("");
+  const [soilType, setSoilType] = useState("");
   const [cropType, setCropType] = useState("");
   const [areaAcres, setAreaAcres] = useState("");
   const [selectedFarmId, setSelectedFarmId] = useState(farms?.[0]?.id || "");
@@ -26,30 +37,39 @@ export function AddFieldForm({ farms, onSubmit, loading }) {
 
   const noFarms = !farms || farms.length === 0;
 
-  const validate = () => {
+  function validate() {
     const e = {};
+
     if (!name.trim()) e.name = "Field name is required";
+    if (!postcode.trim()) e.postcode = "Postcode is required";
     if (noFarms && !farmName.trim()) e.farmName = "Farm name is required";
     if (!noFarms && !selectedFarmId) e.farm = "Select a farm";
-    if (areaAcres && isNaN(parseFloat(areaAcres))) e.areaAcres = "Must be a number";
+
+    if (areaAcres && isNaN(parseFloat(areaAcres))) {
+      e.areaAcres = "Must be a number";
+    }
+
     setErrors(e);
     return Object.keys(e).length === 0;
-  };
+  }
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     if (!validate()) return;
+
     onSubmit({
       name: name.trim(),
       farmName: noFarms ? farmName.trim() : null,
+      postcode: postcode.trim(),
+      soilType: soilType.trim(),
       cropType: cropType.trim(),
       areaAcres: areaAcres ? parseFloat(areaAcres) : null,
       farmId: selectedFarmId,
     });
-  };
+  }
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      {(!farms || farms.length === 0) && (
+      {noFarms && (
         <View style={styles.field}>
           <Text style={styles.label}>Farm Name *</Text>
           <TextInput
@@ -59,8 +79,12 @@ export function AddFieldForm({ farms, onSubmit, loading }) {
             value={farmName}
             onChangeText={setFarmName}
           />
-          {errors.farmName && <Text style={styles.error}>{errors.farmName}</Text>}
-          <Text style={styles.hint}>You'll be able to add more farms later</Text>
+          {errors.farmName && (
+            <Text style={styles.error}>{errors.farmName}</Text>
+          )}
+          <Text style={styles.hint}>
+            You'll be able to add more farms later
+          </Text>
         </View>
       )}
 
@@ -76,9 +100,10 @@ export function AddFieldForm({ farms, onSubmit, loading }) {
         {errors.name && <Text style={styles.error}>{errors.name}</Text>}
       </View>
 
-      {farms.length > 1 && (
+      {farms?.length > 1 && (
         <View style={styles.field}>
           <Text style={styles.label}>Farm *</Text>
+
           {farms.map((farm) => (
             <TouchableOpacity
               key={farm.id}
@@ -98,13 +123,42 @@ export function AddFieldForm({ farms, onSubmit, loading }) {
               </Text>
             </TouchableOpacity>
           ))}
+
           {errors.farm && <Text style={styles.error}>{errors.farm}</Text>}
         </View>
       )}
 
       <View style={styles.field}>
+        <Text style={styles.label}>Postcode *</Text>
+        <TextInput
+          style={[styles.input, errors.postcode && styles.inputError]}
+          placeholder="e.g. UB4 8SH"
+          placeholderTextColor={theme.colours.mutedText}
+          value={postcode}
+          onChangeText={setPostcode}
+          autoCapitalize="characters"
+        />
+        {errors.postcode && <Text style={styles.error}>{errors.postcode}</Text>}
+      </View>
+
+      <View style={styles.field}>
+        <Text style={styles.label}>Soil Type</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="e.g. Clay"
+          placeholderTextColor={theme.colours.mutedText}
+          value={soilType}
+          onChangeText={setSoilType}
+        />
+      </View>
+
+      <View style={styles.field}>
         <Text style={styles.label}>Crop Type</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.crops}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.crops}
+        >
           {UK_CROPS.map((crop) => (
             <TouchableOpacity
               key={crop}
@@ -137,7 +191,9 @@ export function AddFieldForm({ farms, onSubmit, loading }) {
           onChangeText={setAreaAcres}
           keyboardType="decimal-pad"
         />
-        {errors.areaAcres && <Text style={styles.error}>{errors.areaAcres}</Text>}
+        {errors.areaAcres && (
+          <Text style={styles.error}>{errors.areaAcres}</Text>
+        )}
       </View>
 
       <TouchableOpacity
