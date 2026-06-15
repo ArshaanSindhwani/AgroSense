@@ -10,7 +10,11 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerStyle: { backgroundColor: theme.colours.primary },
+        headerTintColor: "#FFFFFF",
+        headerTitleAlign: "center",
+        headerTitleStyle: { fontWeight: "700" },
         tabBarActiveTintColor: theme.colours.primary,
         tabBarInactiveTintColor: theme.colours.mutedText,
         tabBarStyle: {
@@ -53,6 +57,7 @@ export default function TabsLayout() {
         name="recommendations"
         options={{
           title: "Recommendations",
+          tabBarLabel: "Advice",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bulb-outline" size={size} color={color} />
           ),
