@@ -22,6 +22,7 @@ export default function AddFieldScreen() {
       }
       await addField({ ...data, farmId });
       await refresh();
+      Alert.alert("Success", "Field added successfully.");
       router.replace("/(tabs)/fields");
     } catch (err) {
       Alert.alert("Error", err.message || "Could not save field. Please try again.");
