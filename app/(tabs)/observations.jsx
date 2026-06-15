@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useFarmContext } from "../../context/FarmContext";
 import { getObs, deleteObs } from "../../services/firebase/firestore";
@@ -93,7 +94,7 @@ export default function ObservationsScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={observations}
         keyExtractor={(item) => item.id}
@@ -130,7 +131,7 @@ export default function ObservationsScreen() {
       >
         <Ionicons name="add" size={28} color="#fff" />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
