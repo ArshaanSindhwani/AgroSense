@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { FieldCard } from "../../components/cards/FieldCard";
 import { useFarmContext } from "../../context/FarmContext";
@@ -37,7 +38,7 @@ export default function FieldsScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={fields}
         keyExtractor={(item) => item.id}
@@ -69,7 +70,7 @@ export default function FieldsScreen() {
       >
         <Ionicons name="add" size={28} color="#FFFFFF" />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
