@@ -11,6 +11,7 @@ import {
 
 import RecommendationCard from "../../components/cards/RecommendationCard";
 import { theme } from "../../constants/theme";
+import { useThemeColor } from "../../hooks/useThemeColor";
 import { useFarmContext } from "../../context/FarmContext";
 import { generateRecommendation } from "../../services/ai/recommendationService";
 import { getObs } from "../../services/firebase/firestore";
@@ -20,6 +21,11 @@ export default function RecommendationsScreen() {
   const [recommendation, setRecommendation] = useState("");
 
   const { fields } = useFarmContext();
+
+  const background = useThemeColor({}, 'background');
+  const text = useThemeColor({}, 'text');
+  const mutedText = useThemeColor({}, 'mutedText');
+  const primary = useThemeColor({}, 'primary');
 
   async function getLatestObservation() {
     const results = await Promise.all(fields.map((field) => getObs(field.id)));
@@ -86,17 +92,16 @@ export default function RecommendationsScreen() {
   }
 
   return (
-    <ScrollView style={styles.screen}>
+    <ScrollView style={[styles.screen, { backgroundColor: background }]}>
       <View style={styles.container}>
-        <Text style={styles.title}>Recommendations</Text>
+        <Text style={[styles.title, { color: text }]}>Recommendations</Text>
 
-        <Text style={styles.subtitle}>
-          Generate a practical recommendation using your latest observation and
-          field data.
+        <Text style={[styles.subtitle, { color: mutedText }]}>
+          Generate a practical recommendation using your latest observation and field data.
         </Text>
 
         <Pressable
-          style={styles.button}
+          style={[styles.button, { backgroundColor: primary }]}
           onPress={handleGenerateRecommendation}
           disabled={loading}
         >
@@ -116,7 +121,6 @@ export default function RecommendationsScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: theme.colours.background,
   },
   container: {
     padding: theme.spacing.lg,
@@ -125,14 +129,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: theme.fontSize.title,
     fontWeight: "700",
-    color: theme.colours.text,
   },
   subtitle: {
     fontSize: theme.fontSize.body,
-    color: theme.colours.mutedText,
   },
   button: {
-    backgroundColor: theme.colours.primary,
     padding: theme.spacing.md,
     borderRadius: theme.radius.md,
     alignItems: "center",

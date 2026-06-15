@@ -1,14 +1,14 @@
-import { theme as appTheme } from "../constants/theme";
-import { useColorScheme } from "./useColorScheme";
+import {COLOURS} from "../constants/colours"
+import {useTheme} from '../context/ThemeContext'
 
 export function useThemeColor(props = {}, colorName) {
-  const colourScheme = useColorScheme() ?? "light";
+  const {colorScheme} = useTheme()
 
-  const colorFromProps = props[colourScheme];
+  const colorFromProps = props[colorScheme];
 
   if (colorFromProps) {
     return colorFromProps;
   }
 
-  return appTheme.colours[colorName];
+  return COLOURS[colorScheme][colorName];
 }

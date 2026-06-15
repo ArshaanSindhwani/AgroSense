@@ -1,7 +1,7 @@
 import { Tabs, Redirect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuthContext } from "../../context/AuthContext";
-import { theme } from "../../constants/theme";
+import {COLOURS} from "../../constants/colours"
 
 export default function TabsLayout() {
   const { user, loading } = useAuthContext();
@@ -11,15 +11,15 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: true,
-        headerStyle: { backgroundColor: theme.colours.primary },
+        headerStyle: { backgroundColor: COLOURS.light.primary },
         headerTintColor: "#FFFFFF",
         headerTitleAlign: "center",
         headerTitleStyle: { fontWeight: "700" },
-        tabBarActiveTintColor: theme.colours.primary,
-        tabBarInactiveTintColor: theme.colours.mutedText,
+        tabBarActiveTintColor: COLOURS.light.primary,
+        tabBarInactiveTintColor: COLOURS.light.mutedText,
         tabBarStyle: {
-          backgroundColor: theme.colours.card,
-          borderTopColor: theme.colours.border,
+          backgroundColor: COLOURS.light.card,
+          borderTopColor: COLOURS.light.border,
         },
       }}
     >
