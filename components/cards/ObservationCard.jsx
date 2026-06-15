@@ -38,7 +38,7 @@ export function ObservationCard({ observation, fieldName, onDelete }) {
         )}
       </View>
       {!!onDelete && (
-        <TouchableOpacity onPress={onDelete} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+        <TouchableOpacity testID="delete-button" onPress={onDelete} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
           <Ionicons name="trash-outline" size={20} color={theme.colours.danger} />
         </TouchableOpacity>
       )}
