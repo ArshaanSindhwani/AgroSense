@@ -37,6 +37,7 @@ function RootLayoutNav() {
       <Stack.Screen name="add-field" options={{ title: "Add Field" }} />
       <Stack.Screen name="add-observation" options={{ title: "Add Observation" }} />
       <Stack.Screen name="field-details" options={{ title: "Field Details" }} />
+      <Stack.Screen name="add-farm" options={{ title: "Add Farm" }} />
     </Stack>
   );
 }

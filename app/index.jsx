@@ -8,7 +8,7 @@ export default function Index() {
 
   if (loading) return <FullScreenSpinner />;
 
-  if (user) return <Redirect href="/(tabs)/addFarm" />;
+  if (user) return <Redirect href="/(tabs)/dashboard" />;
 
   return <Redirect href="/(auth)/login" />;
 }
