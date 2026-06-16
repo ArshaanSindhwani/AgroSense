@@ -12,6 +12,10 @@ async function addFarm(userId, data) {
   return ref.id;
 }
 
+async function deleteFarm(farmId) {
+  return firestore().collection("farms").doc(farmId).delete();
+}
+
 async function getFarmsByUser(userId) {
   const snap = await firestore()
     .collection("farms")
@@ -24,11 +28,6 @@ async function getFarmsByUser(userId) {
   }));
 }
 
-async function deleteFarm(farmId) {
-  return firestore().collection("farms").doc(farmId).delete();
-}
-
-// Fields
 async function addField(field) {
   const ref = await firestore()
     .collection("fields")
@@ -158,10 +157,19 @@ function getItemTime(item) {
 }
 
 export {
-  addFarm, getFarmsByUser,
-  addField, deleteField, getFieldsByFarmIds, getField, updateField,
-  addObs, deleteObs, getObs, updateObs,
-  addRecommendation, getFieldRecommendations,
+  addFarm,
   deleteFarm,
- // createUser, deleteUser, getUser, updateUser,
+  getFarmsByUser,
+  addField,
+  deleteField,
+  getFieldsByFarmIds,
+  getField,
+  updateField,
+  addObs,
+  deleteObs,
+  getObs,
+  updateObs,
+  addRecommendation,
+  getRecommendations,
+  getFieldRecommendations,
 };
