@@ -50,7 +50,7 @@ export function AddFieldForm({ farms, onSubmit, loading }) {
     const e = {};
 
     if (!name.trim()) e.name = "Field name is required";
-    if (!postcode.trim()) e.postcode = "Postcode is required";
+    // if (!postcode.trim()) e.postcode = "Postcode is required";
     if (noFarms && !farmName.trim()) e.farmName = "Farm name is required";
     if (!noFarms && !selectedFarmId) e.farm = "Select a farm";
 

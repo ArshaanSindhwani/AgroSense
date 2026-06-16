@@ -50,8 +50,10 @@ export default function AddFieldScreen() {
         farmId = await addFarm(farmData);
       }
 
+      const farm = farms.find((f) => f.id === farmId);
+
       const coordinates = await getCoordinatesFromPostcode(
-        data.postcode
+        farm.location
       );
 
       const weatherData = await getWeatherData(
