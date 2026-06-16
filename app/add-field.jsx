@@ -1,4 +1,3 @@
-import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { router } from "expo-router";
@@ -36,25 +35,50 @@ export default function AddFieldScreen() {
         return;
       }
 
+      const postcode = data.postcode?.trim();
+
+      if (!postcode) {
+        Alert.alert(
+          "Missing postcode",
+          "Please enter a valid UK postcode before adding a field."
+        );
+        return;
+      }
+
       setLoading(true);
+
+      let coordinates;
+
+      try {
+        coordinates = await getCoordinatesFromPostcode(postcode);
+      } catch {
+        Alert.alert(
+          "Invalid postcode",
+          "We could not find this postcode. Please check it and try again."
+        );
+        return;
+      }
+
+      if (!coordinates?.latitude || !coordinates?.longitude) {
+        Alert.alert(
+          "Invalid postcode",
+          "We could not find coordinates for this postcode. Please check it and try again."
+        );
+        return;
+      }
 
       let farmId = data.farmId;
 
       if (!farmId && data.farmName) {
         const farmData = {
           name: data.farmName,
+          location: postcode,
           userId: user.uid,
           createdAt: new Date().toISOString(),
         };
 
-        farmId = await addFarm(farmData);
+        farmId = await addFarm(user.uid, farmData);
       }
-
-      const farm = farms.find((f) => f.id === farmId);
-
-      const coordinates = await getCoordinatesFromPostcode(
-        farm.location
-      );
 
       const weatherData = await getWeatherData(
         coordinates.latitude,
@@ -77,16 +101,14 @@ export default function AddFieldScreen() {
         name: data.name,
         cropType: data.cropType || "",
         areaAcres: data.areaAcres || null,
-        postcode: data.postcode || "",
+        postcode,
         soilType: data.soilType || "",
         farmId,
         userId: user.uid,
-
         coordinates,
         weatherData,
         soilData,
         agroData,
-
         createdAt: new Date().toISOString(),
       };
 
@@ -94,19 +116,13 @@ export default function AddFieldScreen() {
 
       await refresh();
 
-      Alert.alert(
-        "Success",
-        "Field added successfully."
-      );
+      Alert.alert("Success", "Field added successfully.");
 
-      router.replace("/(tabs)/fields");
+      router.replace("/fields");
     } catch (err) {
       console.log("Add field failed:", err);
 
-      Alert.alert(
-        "Error",
-        err.message || "Could not add field."
-      );
+      Alert.alert("Error", err.message || "Could not add field.");
     } finally {
       setLoading(false);
     }

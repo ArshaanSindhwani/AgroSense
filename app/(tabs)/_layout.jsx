@@ -7,7 +7,7 @@ import { NetworkIndicator } from "../../components/shared/NetworkIndicator";
 export default function TabsLayout() {
   const { user, loading } = useAuthContext();
   if (loading) return null;
-  if (!user) return <Redirect href="/(auth)/login"/>;
+  if (!user) return <Redirect href="/(auth)/login" />;
   return (
     <Tabs
       screenOptions={{

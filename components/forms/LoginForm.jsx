@@ -17,7 +17,7 @@ export default function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -31,8 +31,10 @@ export default function LoginForm() {
 
     try {
       setLoading(true);
+
       await login(email.trim(), password);
-      router.replace("/(tabs)/addFarm");
+
+      router.replace("/dashboard");
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
@@ -44,7 +46,9 @@ export default function LoginForm() {
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
 
-      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
+      {errorMessage ? (
+        <Text style={styles.error}>{errorMessage}</Text>
+      ) : null}
 
       <TextInput
         style={styles.input}
@@ -65,12 +69,13 @@ export default function LoginForm() {
           secureTextEntry={!showPassword}
           autoCapitalize="none"
         />
+
         <TouchableOpacity
           style={styles.eyeButton}
-          onPress={() => setShowPassword(prev => !prev)}
+          onPress={() => setShowPassword((prev) => !prev)}
         >
           <Ionicons
-            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+            name={showPassword ? "eye-off-outline" : "eye-outline"}
             size={20}
             color="#52796F"
           />
@@ -126,12 +131,12 @@ const styles = StyleSheet.create({
   },
 
   inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: '#95D5B2',
+    borderColor: "#95D5B2",
     borderRadius: 8,
-    backgroundColor: '#F0FAF4',
+    backgroundColor: "#F0FAF4",
     marginBottom: 16,
   },
 
@@ -139,9 +144,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     fontSize: 16,
-    color: '#1B4332',
+    color: "#1B4332",
   },
-  
+
   eyeButton: {
     padding: 12,
   },

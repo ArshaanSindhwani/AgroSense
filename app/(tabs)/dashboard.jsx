@@ -31,16 +31,21 @@ export default function HomeScreen() {
   const [weatherLoading, setWeatherLoading] = useState(false);
 
   useEffect(() => {
-    if (farms.length && !selectedFarm) {
-      setSelectedFarm(farms[0]);
-    }
-
     if (!farms.length) {
       setSelectedFarm(null);
       setSelectedField(null);
       setWeather(null);
+      return;
     }
-  }, [farms, selectedFarm]);
+
+    if (!selectedFarm) {
+      const validFarm = farms.find(
+        (farm) => farm.location?.trim()
+      );
+
+      setSelectedFarm(validFarm || farms[0]);
+    }
+  }, [farms]);
 
   useEffect(() => {
     if (!selectedFarm) {
@@ -61,42 +66,81 @@ export default function HomeScreen() {
     } else {
       setSelectedField(null);
     }
-  }, [fields, selectedFarm, selectedField]);
+  }, [fields, selectedFarm]);
 
   useEffect(() => {
     async function loadWeather() {
-      const postcode = selectedFarm?.location?.trim();
+      if (!selectedFarm) {
+        setWeather(null);
+        return;
+      }
+
+      const postcode = selectedFarm.location?.trim();
 
       if (!postcode) {
+        console.log(
+          `Skipping weather for ${selectedFarm.name}: missing postcode`
+        );
+
         setWeather(null);
+        setWeatherLoading(false);
+
+        const nextValidFarm = farms.find(
+          (farm) =>
+            farm.id !== selectedFarm.id &&
+            farm.location?.trim()
+        );
+
+        if (nextValidFarm) {
+          setSelectedFarm(nextValidFarm);
+        }
+
         return;
       }
 
       setWeatherLoading(true);
 
       try {
-        const coords = await getCoordinatesFromPostcode(postcode);
+        const coords =
+          await getCoordinatesFromPostcode(postcode);
 
         if (!coords?.latitude || !coords?.longitude) {
-          setWeather(null);
-          return;
+          throw new Error("Missing coordinates");
         }
 
-        const data = await getWeatherData(coords.latitude, coords.longitude);
+        const data = await getWeatherData(
+          coords.latitude,
+          coords.longitude
+        );
 
         setWeather({
           ...data,
           place: coords.location || postcode,
         });
-      } catch {
+      } catch (error) {
+        console.log(
+          `Weather unavailable for ${postcode}:`,
+          error.message
+        );
+
         setWeather(null);
+
+        const nextValidFarm = farms.find(
+          (farm) =>
+            farm.id !== selectedFarm.id &&
+            farm.location?.trim()
+        );
+
+        if (nextValidFarm) {
+          setSelectedFarm(nextValidFarm);
+        }
       } finally {
         setWeatherLoading(false);
       }
     }
 
     loadWeather();
-  }, [selectedFarm]);
+  }, [selectedFarm, farms]);
 
   async function requireInternet(action) {
     const online = await isOnline();
@@ -152,13 +196,19 @@ export default function HomeScreen() {
 
   function getSelectedFarmFields() {
     if (!selectedFarm) return [];
-    return fields.filter((field) => field.farmId === selectedFarm.id);
+
+    return fields.filter(
+      (field) => field.farmId === selectedFarm.id
+    );
   }
 
   if (loading) {
     return (
       <View style={styles.centred}>
-        <ActivityIndicator size="large" color={theme.colours.primary} />
+        <ActivityIndicator
+          size="large"
+          color={theme.colours.primary}
+        />
       </View>
     );
   }
@@ -173,13 +223,18 @@ export default function HomeScreen() {
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           <>
-            <WeatherCard weather={weather} loading={weatherLoading} />
+            <WeatherCard
+              weather={weather}
+              loading={weatherLoading}
+            />
 
             <FieldLocationMap field={selectedField} />
 
             {selectedFarmFields.length > 1 && (
               <>
-                <Text style={styles.subheading}>Map Field</Text>
+                <Text style={styles.subheading}>
+                  Map Field
+                </Text>
 
                 <FlatList
                   data={selectedFarmFields}
@@ -194,13 +249,16 @@ export default function HomeScreen() {
                         selectedField?.id === item.id &&
                           styles.fieldChipSelected,
                       ]}
-                      onPress={() => setSelectedField(item)}
+                      onPress={() =>
+                        setSelectedField(item)
+                      }
                     >
                       <Text
                         style={[
                           styles.fieldChipText,
                           selectedField?.id === item.id &&
-                            styles.fieldChipTextSelected,
+                            styles
+                              .fieldChipTextSelected,
                         ]}
                       >
                         {item.name}
@@ -211,28 +269,46 @@ export default function HomeScreen() {
               </>
             )}
 
-            <Text style={styles.heading}>Your Farms</Text>
+            <Text style={styles.heading}>
+              Your Farms
+            </Text>
           </>
         }
         renderItem={({ item }) => (
           <FarmCard
             farm={item}
-            selected={selectedFarm?.id === item.id}
-            onSelect={() => setSelectedFarm(item)}
-            onDelete={() => confirmDeleteFarm(item)}
+            selected={
+              selectedFarm?.id === item.id
+            }
+            onSelect={() =>
+              setSelectedFarm(item)
+            }
+            onDelete={() =>
+              confirmDeleteFarm(item)
+            }
           />
         )}
         ListEmptyComponent={
-          <Text style={styles.empty}>No farms yet. Tap + to add one.</Text>
+          <Text style={styles.empty}>
+            No farms yet. Tap + to add one.
+          </Text>
         }
       />
 
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => requireInternet(() => router.push("/add-farm"))}
+        onPress={() =>
+          requireInternet(() =>
+            router.push("/add-farm")
+          )
+        }
         activeOpacity={0.85}
       >
-        <Ionicons name="add" size={28} color="#FFFFFF" />
+        <Ionicons
+          name="add"
+          size={28}
+          color="#FFFFFF"
+        />
       </TouchableOpacity>
     </View>
   );
