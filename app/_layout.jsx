@@ -5,11 +5,14 @@ import { AuthProvider, useAuthContext } from "../context/AuthContext";
 import { FarmProvider } from "../context/FarmContext";
 import { FullScreenSpinner } from "../components/shared/LoadingSpinner";
 import { theme } from "../constants/theme";
+import useNetworkStatus from "../hooks/useNetworkStatus";
 import {ThemeProvider} from "../context/ThemeContext"
 import {COLOURS} from "../constants/colours"
 
 function RootLayoutNav() {
   const { loading } = useAuthContext();
+
+  useNetworkStatus();
 
   if (loading) return <FullScreenSpinner />;
 

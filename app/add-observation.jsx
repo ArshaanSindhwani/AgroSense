@@ -10,6 +10,9 @@ import { ObservationForm } from "../components/forms/ObservationForm";
 import { theme } from "../constants/theme";
 import { useThemeColor } from "../hooks/useThemeColor";
 
+import { isOnline } from "../services/offline/networkStatus";
+import { addToSyncQueue } from "../services/offline/syncQueue";
+
 export default function AddObservationScreen() {
   const { fields, refresh } = useFarmContext();
   const { user } = useAuthContext();
@@ -29,6 +32,7 @@ export default function AddObservationScreen() {
         <Text style={[styles.noFieldsSubtitle, { color: mutedText }]}>
           Add a field before recording an observation.
         </Text>
+
         <TouchableOpacity
           style={[styles.goButton, { backgroundColor: primary }]}
           onPress={() => router.replace("/(tabs)/fields")}
@@ -40,15 +44,33 @@ export default function AddObservationScreen() {
   }
 
   async function handleSubmit(data) {
-    setLoading(true);
+    const observationData = {
+      ...data,
+      userId: user.uid,
+      recordedAt: new Date().toISOString(),
+    };
+
     try {
-      await addObs({
-        ...data,
-        userId: user.uid,
-        recordedAt: new Date().toISOString(),
-      });
+      const online = await isOnline();
+
+      if (!online) {
+        await addToSyncQueue("CREATE_OBSERVATION", observationData);
+
+        Alert.alert(
+          "Observation logged",
+          "Your observation has been saved offline and will sync when the internet connection has been restored."
+        );
+
+        router.replace("/(tabs)/observations");
+        return;
+      }
+
+      setLoading(true);
+
+      await addObs(observationData);
       await refresh();
-      Alert.alert("Success", "Observation added successfully.");
+
+      Alert.alert("Saved", "Observation saved successfully.");
       router.replace("/(tabs)/observations");
     } catch (err) {
       Alert.alert("Error", err.message || "Could not save observation.");

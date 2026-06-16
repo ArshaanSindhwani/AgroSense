@@ -14,7 +14,7 @@ import { theme } from "../../constants/theme";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import { useFarmContext } from "../../context/FarmContext";
 import { generateRecommendation } from "../../services/ai/recommendationService";
-import { getObs } from "../../services/firebase/firestore";
+import { isOnline } from "../../services/offline/networkStatus";
 
 export default function RecommendationsScreen() {
   const [loading, setLoading] = useState(false);
@@ -53,6 +53,16 @@ export default function RecommendationsScreen() {
   }
 
   async function handleGenerateRecommendation() {
+    const online = await isOnline();
+
+    if (!online) {
+      Alert.alert(
+        "Feature unavailable offline",
+        "AI recommendations are not available when offline. Please reconnect to the internet and try again."
+      );
+      return;
+    }
+
     if (!fields.length) {
       Alert.alert("Missing field", "Please add a field first.");
       return;
@@ -69,7 +79,7 @@ export default function RecommendationsScreen() {
       }
 
       const field = fields.find(
-        (item) => item.id === latestObservation.fieldId,
+        (item) => item.id === latestObservation.fieldId
       );
 
       const result = await generateRecommendation({

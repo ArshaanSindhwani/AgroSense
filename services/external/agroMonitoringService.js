@@ -1,59 +1,76 @@
-import { API_CONFIG } from "../../utils/config";
-
-function getApiKey() {
-  return API_CONFIG.agroMonitoringApiKey;
-}
-
-export function createSimplePolygon(latitude, longitude) {
-  const offset = 0.001;
-
-  return [
-    [longitude - offset, latitude - offset],
-    [longitude + offset, latitude - offset],
-    [longitude + offset, latitude + offset],
-    [longitude - offset, latitude + offset],
-    [longitude - offset, latitude - offset],
-  ];
-}
+import {
+  AGROMONITORING_BASE_URL,
+  AGROMONITORING_API_KEY,
+} from "../../constants/api";
 
 export async function createAgroPolygon(fieldName, latitude, longitude) {
-  const apiKey = getApiKey();
+  try {
+    if (!AGROMONITORING_API_KEY) {
+      console.log("AgroMonitoring API key missing");
+      return null;
+    }
 
-  if (!apiKey) {
-    return null;
-  }
+    const offset = 0.005;
 
-  const polygon = createSimplePolygon(latitude, longitude);
-
-  const response = await fetch(
-    `${API_CONFIG.agroMonitoringBaseUrl}/polygons?appid=${apiKey}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: fieldName,
-        geo_json: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "Polygon",
-            coordinates: [polygon],
-          },
+    const polygon = {
+      name: fieldName,
+      geo_json: {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [longitude - offset, latitude - offset],
+              [longitude + offset, latitude - offset],
+              [longitude + offset, latitude + offset],
+              [longitude - offset, latitude + offset],
+              [longitude - offset, latitude - offset],
+            ],
+          ],
         },
-      }),
-    },
-  );
+      },
+    };
 
-  if (!response.ok) {
+    const response = await fetch(
+      `${AGROMONITORING_BASE_URL}/polygons?appid=${AGROMONITORING_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(polygon),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      if (data?.message?.includes("duplicated")) {
+        const match = data.message.match(/'([^']+)'/);
+        const polygonId = match ? match[1] : null;
+
+        return {
+          polygonId,
+          name: fieldName,
+          area: null,
+          duplicated: true,
+        };
+      }
+
+      console.log("AgroMonitoring error:", data);
+      return null;
+    }
+
+    return {
+      polygonId: data.id,
+      name: data.name,
+      area: data.area,
+      center: data.center,
+      duplicated: false,
+    };
+  } catch (error) {
+    console.log("AgroMonitoring failed:", error.message);
     return null;
   }
-
-  const data = await response.json();
-
-  return {
-    polygonId: data.id,
-    area: data.area,
-  };
 }
