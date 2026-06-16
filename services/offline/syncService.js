@@ -10,47 +10,62 @@ import {
   addObs,
 } from "../firebase/firestore";
 
-export async function syncOfflineQueue() {
-  const online = await isOnline();
+let syncing = false;
 
-  if (!online) {
+export async function syncOfflineQueue() {
+  if (syncing) {
     return {
       success: false,
-      message: "Device is offline.",
+      message: "Sync already running.",
     };
   }
 
-  const queue = await getSyncQueue();
+  syncing = true;
 
-  if (!queue.length) {
+  try {
+    const online = await isOnline();
+
+    if (!online) {
+      return {
+        success: false,
+        message: "Device is offline.",
+      };
+    }
+
+    const queue = await getSyncQueue();
+
+    if (!queue.length) {
+      return {
+        success: true,
+        message: "No offline items to sync.",
+      };
+    }
+
+    for (const item of queue) {
+      try {
+        if (item.type === "CREATE_FARM") {
+          await addFarm(item.payload.userId, item.payload.data);
+        }
+
+        if (item.type === "CREATE_FIELD") {
+          await addField(item.payload);
+        }
+
+        if (item.type === "CREATE_OBSERVATION") {
+          await addObs(item.payload);
+        }
+
+        await removeFromSyncQueue(item.id);
+      } catch (error) {
+        console.log("Failed to sync item:", item, error.message);
+      }
+    }
+
     return {
       success: true,
-      message: "No offline items to sync.",
+      message: "Offline sync complete.",
     };
+  } finally {
+    syncing = false;
   }
-
-  for (const item of queue) {
-    try {
-      if (item.type === "CREATE_FARM") {
-        await addFarm(item.payload.userId, item.payload.data);
-      }
-
-      if (item.type === "CREATE_FIELD") {
-        await addField(item.payload);
-      }
-
-      if (item.type === "CREATE_OBSERVATION") {
-        await addObs(item.payload);
-      }
-
-      await removeFromSyncQueue(item.id);
-    } catch (error) {
-      console.log("Failed to sync item:", item, error.message);
-    }
-  }
-
-  return {
-    success: true,
-    message: "Offline sync complete.",
-  };
 }

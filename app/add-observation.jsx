@@ -39,8 +39,6 @@ export default function AddObservationScreen() {
   }
 
   async function handleSubmit(data) {
-    setLoading(true);
-
     const observationData = {
       ...data,
       userId: user.uid,
@@ -50,20 +48,24 @@ export default function AddObservationScreen() {
     try {
       const online = await isOnline();
 
-      if (online) {
-        await addObs(observationData);
-
-        Alert.alert("Saved", "Observation saved successfully.");
-      } else {
+      if (!online) {
         await addToSyncQueue("CREATE_OBSERVATION", observationData);
 
         Alert.alert(
-          "Saved offline",
-          "You are offline, so this observation will sync when your internet returns."
+          "Observation logged",
+          "Your observation has been saved offline and will sync when the internet connection has been restored."
         );
+
+        router.replace("/(tabs)/observations");
+        return;
       }
 
+      setLoading(true);
+
+      await addObs(observationData);
       await refresh();
+
+      Alert.alert("Saved", "Observation saved successfully.");
       router.replace("/(tabs)/observations");
     } catch (err) {
       Alert.alert("Error", err.message || "Could not save observation.");

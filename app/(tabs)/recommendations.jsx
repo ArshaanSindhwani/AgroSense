@@ -14,6 +14,7 @@ import { theme } from "../../constants/theme";
 import { useFarmContext } from "../../context/FarmContext";
 import { getObs } from "../../services/firebase/firestore";
 import { generateRecommendation } from "../../services/ai/recommendationService";
+import { isOnline } from "../../services/offline/networkStatus";
 
 export default function RecommendationsScreen() {
   const [loading, setLoading] = useState(false);
@@ -47,6 +48,16 @@ export default function RecommendationsScreen() {
   }
 
   async function handleGenerateRecommendation() {
+    const online = await isOnline();
+
+    if (!online) {
+      Alert.alert(
+        "Feature unavailable offline",
+        "AI recommendations are not available when offline. Please reconnect to the internet and try again."
+      );
+      return;
+    }
+
     if (!fields.length) {
       Alert.alert("Missing field", "Please add a field first.");
       return;
@@ -62,7 +73,9 @@ export default function RecommendationsScreen() {
         return;
       }
 
-      const field = fields.find((item) => item.id === latestObservation.fieldId);
+      const field = fields.find(
+        (item) => item.id === latestObservation.fieldId
+      );
 
       const result = await generateRecommendation({
         fieldName: field?.name,
@@ -71,8 +84,8 @@ export default function RecommendationsScreen() {
         pestSightings: latestObservation.pestSightings,
         diseaseSightings: latestObservation.diseaseSightings,
         notes: latestObservation.notes,
-        weatherData: latestObservation.weatherData,
-        soilData: latestObservation.soilData,
+        weatherData: latestObservation.weatherData || field?.weatherData,
+        soilData: latestObservation.soilData || field?.soilData,
       });
 
       setRecommendation(result);
@@ -89,7 +102,7 @@ export default function RecommendationsScreen() {
         <Text style={styles.title}>Recommendations</Text>
 
         <Text style={styles.subtitle}>
-          Generate a practical recommendation using your latest observation.
+          Generate a practical recommendation using your latest observation and field data.
         </Text>
 
         <Pressable
