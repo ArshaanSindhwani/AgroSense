@@ -58,7 +58,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="recommendations"
         options={{
-          title: "Recommendations",
+          title: "Suggestions",
           tabBarLabel: "Advice",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bulb-outline" size={size} color={color} />

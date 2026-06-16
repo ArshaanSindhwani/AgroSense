@@ -202,11 +202,11 @@ export default function RecommendationsScreen() {
   return (
     <ScrollView style={[styles.screen, { backgroundColor: background }]}>
       <View style={styles.container}>
-        <Text style={[styles.title, { color: text }]}>Recommendations</Text>
+        <Text style={[styles.title, { color: text }]}>Suggestions</Text>
 
         <Text style={[styles.subtitle, { color: mutedText }]}>
-          Select an observation, generate a field-specific AI recommendation,
-          and review previous recommendations.
+          Select an observation, generate an AI farming suggestion,
+          and review previous suggestions.
         </Text>
 
         {loadingData ? (
