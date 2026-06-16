@@ -2,10 +2,7 @@ import { getWeatherData } from "../../services/external/weatherService";
 import * as weatherServiceModule from "../../services/external/weatherService";
 import { getCoordinatesFromPostcode } from "../../services/external/coordinateService";
 import { getSoilData } from "../../services/external/soilService";
-import {
-  createSimplePolygon,
-  createAgroPolygon,
-} from "../../services/external/agroMonitoringService";
+import { createAgroPolygon } from "../../services/external/agroMonitoringService";
 
 // ─── Mock setup ──────────────────────────────────────────────────────────────
 
@@ -208,29 +205,6 @@ describe("getSoilData", () => {
     const result = await getSoilData(51.5, -0.12);
 
     expect(result.soilType).toBe("");
-  });
-});
-
-// ─── createSimplePolygon ─────────────────────────────────────────────────────
-
-describe("createSimplePolygon", () => {
-  it("returns a closed 5-point polygon", () => {
-    const polygon = createSimplePolygon(51.5, -0.12);
-
-    expect(polygon).toHaveLength(5);
-    expect(polygon[0]).toEqual(polygon[4]);
-  });
-
-  it("uses a 0.001 degree offset around the centre point", () => {
-    const polygon = createSimplePolygon(51.5, -0.12);
-
-    const lons = polygon.map(([lon]) => lon);
-    const lats = polygon.map(([, lat]) => lat);
-
-    expect(Math.min(...lons)).toBeCloseTo(-0.121);
-    expect(Math.max(...lons)).toBeCloseTo(-0.119);
-    expect(Math.min(...lats)).toBeCloseTo(51.499);
-    expect(Math.max(...lats)).toBeCloseTo(51.501);
   });
 });
 

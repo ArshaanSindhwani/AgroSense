@@ -1,8 +1,11 @@
 import React from "react";
-import { render, screen, waitFor, userEvent } from "@testing-library/react-native";
+import { render as rtlRender, screen, waitFor, userEvent } from "@testing-library/react-native";
 import { Alert } from "react-native";
 
 import AddFarmScreen from "../../app/(tabs)/addFarm";
+import { ThemeProvider } from "../../context/ThemeContext";
+
+const render = (component) => rtlRender(component, { wrapper: ThemeProvider });
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 const mockReplace = jest.fn()

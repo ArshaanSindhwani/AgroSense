@@ -1,14 +1,7 @@
 import { isOnline } from "./networkStatus";
-import {
-  getSyncQueue,
-  removeFromSyncQueue,
-} from "./syncQueue";
+import { getSyncQueue, removeFromSyncQueue } from "./syncQueue";
 
-import {
-  addFarm,
-  addField,
-  addObs,
-} from "../firebase/firestore";
+import { addFarm, addField, addObs } from "../firebase/firestore";
 
 let syncing = false;
 
@@ -16,11 +9,13 @@ export async function syncOfflineQueue() {
   if (syncing) {
     return {
       success: false,
+      syncedCount: 0,
       message: "Sync already running.",
     };
   }
 
   syncing = true;
+  let syncedCount = 0;
 
   try {
     const online = await isOnline();
@@ -28,6 +23,7 @@ export async function syncOfflineQueue() {
     if (!online) {
       return {
         success: false,
+        syncedCount: 0,
         message: "Device is offline.",
       };
     }
@@ -37,6 +33,7 @@ export async function syncOfflineQueue() {
     if (!queue.length) {
       return {
         success: true,
+        syncedCount: 0,
         message: "No offline items to sync.",
       };
     }
@@ -45,14 +42,17 @@ export async function syncOfflineQueue() {
       try {
         if (item.type === "CREATE_FARM") {
           await addFarm(item.payload.userId, item.payload.data);
+          syncedCount++;
         }
 
         if (item.type === "CREATE_FIELD") {
           await addField(item.payload);
+          syncedCount++;
         }
 
         if (item.type === "CREATE_OBSERVATION") {
           await addObs(item.payload);
+          syncedCount++;
         }
 
         await removeFromSyncQueue(item.id);
@@ -63,6 +63,7 @@ export async function syncOfflineQueue() {
 
     return {
       success: true,
+      syncedCount,
       message: "Offline sync complete.",
     };
   } finally {
