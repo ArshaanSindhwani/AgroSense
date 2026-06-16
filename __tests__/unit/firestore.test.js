@@ -252,7 +252,7 @@ describe("addRecommendation", () => {
 // ─── getFieldRecommendations ─────────────────────────────────────────────────
 
 describe("getFieldRecommendations", () => {
-  it("queries recommendations by fieldId ordered by createdAt desc", async () => {
+  it("queries recommendations by fieldId and returns mapped docs", async () => {
     mockGet.mockResolvedValueOnce(
       makeSnap([makeDoc("rec-1", { fieldId: "field-1", text: "Apply fungicide." })])
     );
@@ -260,7 +260,6 @@ describe("getFieldRecommendations", () => {
     const result = await getFieldRecommendations("field-1");
 
     expect(mockWhere).toHaveBeenCalledWith("fieldId", "==", "field-1");
-    expect(mockOrderBy).toHaveBeenCalledWith("createdAt", "desc");
     expect(result).toEqual([{ id: "rec-1", fieldId: "field-1", text: "Apply fungicide." }]);
   });
 

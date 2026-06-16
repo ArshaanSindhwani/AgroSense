@@ -1,31 +1,14 @@
 import firestore from "@react-native-firebase/firestore";
 
-// Users
-// async function createUser(userId, profile) {
-//   return firestore()
-//     .collection("users")
-//     .doc(userId)
-//     .set({ ...profile, createdAt: firestore.FieldValue.serverTimestamp() });
-// }
-
-// async function deleteUser(userId) {
-//   return firestore().collection("users").doc(userId).delete();
-// }
-
-// async function getUser(userId) {
-//   const doc = await firestore().collection("users").doc(userId).get();
-//   return { id: doc.id, ...doc.data() };
-// }
-
-// async function updateUser(userId, updates) {
-//   return firestore().collection("users").doc(userId).update(updates);
-// }
-
-// Farms
 async function addFarm(userId, data) {
   const ref = await firestore()
     .collection("farms")
-    .add({ ...data, userId, createdAt: firestore.FieldValue.serverTimestamp() });
+    .add({
+      ...data,
+      userId,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    });
+
   return ref.id;
 }
 
@@ -34,7 +17,11 @@ async function getFarmsByUser(userId) {
     .collection("farms")
     .where("userId", "==", userId)
     .get();
-  return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+  return snap.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 }
 
 async function deleteFarm(farmId) {
@@ -45,7 +32,11 @@ async function deleteFarm(farmId) {
 async function addField(field) {
   const ref = await firestore()
     .collection("fields")
-    .add({ ...field, createdAt: firestore.FieldValue.serverTimestamp() });
+    .add({
+      ...field,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    });
+
   return ref.id;
 }
 
@@ -55,27 +46,40 @@ async function deleteField(fieldId) {
 
 async function getFieldsByFarmIds(farmIds) {
   if (!farmIds.length) return [];
+
   const snap = await firestore()
     .collection("fields")
     .where("farmId", "in", farmIds)
     .get();
-  return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+  return snap.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 }
 
 async function getField(fieldId) {
   const doc = await firestore().collection("fields").doc(fieldId).get();
-  return { id: doc.id, ...doc.data() };
+
+  return {
+    id: doc.id,
+    ...doc.data(),
+  };
 }
 
 async function updateField(fieldId, updates) {
   return firestore().collection("fields").doc(fieldId).update(updates);
 }
 
-// Observations
 async function addObs(obs) {
-  return firestore()
+  const ref = await firestore()
     .collection("observations")
-    .add({ ...obs, createdAt: firestore.FieldValue.serverTimestamp() });
+    .add({
+      ...obs,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    });
+
+  return ref.id;
 }
 
 async function deleteObs(obsId) {
@@ -87,27 +91,70 @@ async function getObs(fieldId) {
     .collection("observations")
     .where("fieldId", "==", fieldId)
     .get();
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 }
 
 async function updateObs(obsId, updates) {
   return firestore().collection("observations").doc(obsId).update(updates);
 }
 
-// Recommendations
 async function addRecommendation(recommendation) {
-  return firestore()
+  const ref = await firestore()
     .collection("recommendations")
-    .add({ ...recommendation, createdAt: firestore.FieldValue.serverTimestamp() });
+    .add({
+      ...recommendation,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    });
+
+  return ref.id;
+}
+
+async function getRecommendations(userId) {
+  const snapshot = await firestore()
+    .collection("recommendations")
+    .where("userId", "==", userId)
+    .get();
+
+  return snapshot.docs
+    .map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    .sort((a, b) => getItemTime(b) - getItemTime(a));
 }
 
 async function getFieldRecommendations(fieldId) {
   const snapshot = await firestore()
     .collection("recommendations")
     .where("fieldId", "==", fieldId)
-    .orderBy("createdAt", "desc")
     .get();
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+  return snapshot.docs
+    .map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    .sort((a, b) => getItemTime(b) - getItemTime(a));
+}
+
+function getItemTime(item) {
+  if (item.createdAt?.seconds) {
+    return item.createdAt.seconds * 1000;
+  }
+
+  if (item.createdAt) {
+    return new Date(item.createdAt).getTime();
+  }
+
+  if (item.recordedAt) {
+    return new Date(item.recordedAt).getTime();
+  }
+
+  return 0;
 }
 
 export {

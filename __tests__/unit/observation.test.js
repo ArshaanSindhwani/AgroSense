@@ -2,6 +2,7 @@ import React from "react";
 import { act, fireEvent, render } from "@testing-library/react-native";
 import { ObservationCard } from "../../components/cards/ObservationCard";
 import { ObservationForm } from "../../components/forms/ObservationForm";
+import { ThemeProvider } from "../../context/ThemeContext";
 
 jest.mock("@expo/vector-icons", () => ({
   Ionicons: () => null,
@@ -103,7 +104,8 @@ describe("ObservationForm", () => {
 
   it("renders all field names as selectable chips", async () => {
     const { getByText } = await render(
-      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />
+      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />,
+      { wrapper: ThemeProvider }
     );
     expect(getByText("North Field")).toBeTruthy();
     expect(getByText("South Field")).toBeTruthy();
@@ -111,7 +113,8 @@ describe("ObservationForm", () => {
 
   it("renders all growth stage options", async () => {
     const { getByText } = await render(
-      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />
+      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />,
+      { wrapper: ThemeProvider }
     );
     expect(getByText("Seedling")).toBeTruthy();
     expect(getByText("Vegetative")).toBeTruthy();
@@ -121,7 +124,8 @@ describe("ObservationForm", () => {
 
   it("shows a field error when submitted without selecting a field", async () => {
     const { getByText } = await render(
-      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />
+      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />,
+      { wrapper: ThemeProvider }
     );
     await press(getByText("Save Observation"));
     expect(getByText("Please select a field.")).toBeTruthy();
@@ -129,7 +133,8 @@ describe("ObservationForm", () => {
 
   it("shows a growth stage error when submitted without selecting a stage", async () => {
     const { getByText } = await render(
-      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />
+      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />,
+      { wrapper: ThemeProvider }
     );
     await press(getByText("North Field"));
     await press(getByText("Save Observation"));
@@ -138,7 +143,8 @@ describe("ObservationForm", () => {
 
   it("calls onSubmit with correct data when form is valid", async () => {
     const { getByText } = await render(
-      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />
+      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={false} />,
+      { wrapper: ThemeProvider }
     );
     await press(getByText("North Field"));
     await press(getByText("Vegetative"));
@@ -159,7 +165,8 @@ describe("ObservationForm", () => {
         fields={[{ id: "field-1", name: "North Field" }]}
         onSubmit={onSubmit}
         loading={false}
-      />
+      />,
+      { wrapper: ThemeProvider }
     );
     await press(getByText("Seedling"));
     await press(getByText("Save Observation"));
@@ -170,7 +177,8 @@ describe("ObservationForm", () => {
 
   it("hides the submit button and shows a spinner when loading", async () => {
     const { queryByText } = await render(
-      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={true} />
+      <ObservationForm fields={mockFields} onSubmit={onSubmit} loading={true} />,
+      { wrapper: ThemeProvider }
     );
     expect(queryByText("Save Observation")).toBeNull();
   });
