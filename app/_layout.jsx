@@ -8,6 +8,7 @@ import { theme } from "../constants/theme";
 import useNetworkStatus from "../hooks/useNetworkStatus";
 import {ThemeProvider} from "../context/ThemeContext"
 import {COLOURS} from "../constants/colours"
+import { NetworkIndicator } from "../components/shared/NetworkIndicator";
 
 function RootLayoutNav() {
   const { loading } = useAuthContext();
@@ -26,6 +27,7 @@ function RootLayoutNav() {
         headerTitleStyle: {
           fontWeight: "700",
         },
+        headerRight: () => <NetworkIndicator />,
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
