@@ -6,6 +6,8 @@ import { FarmProvider } from "../context/FarmContext";
 import { FullScreenSpinner } from "../components/shared/LoadingSpinner";
 import { theme } from "../constants/theme";
 import useNetworkStatus from "../hooks/useNetworkStatus";
+import {ThemeProvider} from "../context/ThemeContext"
+import {COLOURS} from "../constants/colours"
 
 function RootLayoutNav() {
   const { loading } = useAuthContext();
@@ -18,7 +20,7 @@ function RootLayoutNav() {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: theme.colours.primary,
+          backgroundColor: COLOURS.light.primary,
         },
         headerTintColor: "#FFFFFF",
         headerTitleStyle: {
@@ -41,9 +43,12 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <FarmProvider>
-        <RootLayoutNav />
-        <StatusBar style="light" />
+        <ThemeProvider> 
+          <RootLayoutNav />
+          <StatusBar style="light" />
+        </ThemeProvider>
       </FarmProvider>
     </AuthProvider>
   );
 }
+

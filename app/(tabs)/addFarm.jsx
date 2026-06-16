@@ -3,6 +3,8 @@ import { useRouter } from "expo-router";
 import { AddFarmForm } from "../../components/forms/AddFarmForm";
 import { useAuthContext } from "../../context/AuthContext";
 import { addFarm } from "../../services/firebase/firestore";
+import { Alert } from "react-native";
+import {useThemeColor} from "../../hooks/useColorScheme"
 
 export default function AddFarmScreen() {
   const router = useRouter();
@@ -17,6 +19,7 @@ export default function AddFarmScreen() {
         location: data.location,
         size: data.size ? { value: parseFloat(data.size), unit: data.unit } : null,
       });
+      Alert.alert("Success", "Farm added successfully.");
       router.replace("/(tabs)/fields");
     } catch (err) {
       console.error("Failed to add farm:", err);

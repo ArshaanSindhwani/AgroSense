@@ -10,17 +10,26 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useFarmContext } from "../../context/FarmContext";
 import { getObs, deleteObs } from "../../services/firebase/firestore";
 import { ObservationCard } from "../../components/cards/ObservationCard";
 import { theme } from "../../constants/theme";
+import { useThemeColor } from "../../hooks/useThemeColor";
 
 export default function ObservationsScreen() {
   const { fields, loading: fieldsLoading } = useFarmContext();
   const [observations, setObservations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const background = useThemeColor({}, 'background');
+  const text = useThemeColor({}, 'text');
+  const mutedText = useThemeColor({}, 'mutedText');
+  const border = useThemeColor({}, 'border');
+  const primary = useThemeColor({}, 'primary');
+  const danger = useThemeColor({}, 'danger');
 
   const loadObservations = useCallback(async () => {
     if (!fields.length) {
@@ -75,17 +84,19 @@ export default function ObservationsScreen() {
 
   if (fieldsLoading || loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={theme.colours.primary} />
+      <View style={[styles.centered, { backgroundColor: background }]}>
+        <ActivityIndicator size="large" color={primary} />
       </View>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity onPress={loadObservations} style={styles.retryBtn}>
+      <View style={[styles.centered, { backgroundColor: background }]}>
+        <Text style={[styles.errorText, { color: danger }]}>{error}</Text>
+        <TouchableOpacity
+          onPress={loadObservations}
+          style={[styles.retryBtn, { backgroundColor: primary }]}>
           <Text style={styles.retryText}>Retry</Text>
         </TouchableOpacity>
       </View>
@@ -93,7 +104,7 @@ export default function ObservationsScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: background }]}>
       <FlatList
         data={observations}
         keyExtractor={(item) => item.id}
@@ -109,13 +120,9 @@ export default function ObservationsScreen() {
         )}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Ionicons
-              name="eye-off-outline"
-              size={48}
-              color={theme.colours.border}
-            />
-            <Text style={styles.emptyTitle}>No observations yet</Text>
-            <Text style={styles.emptySubtitle}>
+            <Ionicons name="eye-off-outline" size={48} color={border} />
+            <Text style={[styles.emptyTitle, { color: text }]}>No observations yet</Text>
+            <Text style={[styles.emptySubtitle, { color: mutedText }]}>
               Tap the + button to record your first observation.
             </Text>
           </View>
@@ -125,19 +132,18 @@ export default function ObservationsScreen() {
       />
 
       <TouchableOpacity
-        style={styles.fab}
+        style={[styles.fab, { backgroundColor: primary }]}
         onPress={() => router.push("/add-observation")}
       >
         <Ionicons name="add" size={28} color="#fff" />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colours.background,
   },
   listContent: {
     padding: theme.spacing.md,
@@ -161,12 +167,10 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: theme.fontSize.subtitle,
     fontWeight: "600",
-    color: theme.colours.text,
     marginTop: theme.spacing.md,
   },
   emptySubtitle: {
     fontSize: theme.fontSize.body,
-    color: theme.colours.mutedText,
     textAlign: "center",
     marginTop: theme.spacing.sm,
   },
@@ -179,7 +183,6 @@ const styles = StyleSheet.create({
   retryBtn: {
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.sm,
-    backgroundColor: theme.colours.primary,
     borderRadius: theme.radius.md,
   },
   retryText: {
@@ -193,7 +196,6 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: theme.colours.primary,
     alignItems: "center",
     justifyContent: "center",
     elevation: 4,

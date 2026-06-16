@@ -10,12 +10,13 @@ import {
 } from "react-native";
 
 import { theme } from "../../constants/theme";
+import { useThemeColor } from "../../hooks/useThemeColor";
 
 const GROWTH_STAGES = ["Seedling", "Vegetative", "Flowering", "Harvest"];
 const PEST_OPTIONS = ["None", "Aphids", "Slugs", "Weevils", "Fungal", "Other"];
 const SOIL_OPTIONS = ["Good", "Waterlogged", "Dry", "Compacted", "Eroded"];
 
-function ChipRow({ options, selected, onSelect }) {
+function ChipRow({ options, selected, onSelect, card, border, primary, text }) {
   return (
     <ScrollView
       horizontal
@@ -25,15 +26,18 @@ function ChipRow({ options, selected, onSelect }) {
       {options.map((opt) => (
         <TouchableOpacity
           key={opt}
-          style={[styles.chip, selected === opt && styles.chipSelected]}
+          style={[
+            styles.chip,
+            { backgroundColor: card, borderColor: border },
+            selected === opt && { backgroundColor: primary, borderColor: primary },
+          ]}
           onPress={() => onSelect(opt)}
         >
-          <Text
-            style={[
-              styles.chipText,
-              selected === opt && styles.chipTextSelected,
-            ]}
-          >
+          <Text style={[
+            styles.chipText,
+            { color: text },
+            selected === opt && styles.chipTextSelected,
+          ]}>
             {opt}
           </Text>
         </TouchableOpacity>
@@ -49,6 +53,14 @@ export function ObservationForm({ fields, onSubmit, loading }) {
   const [soilCondition, setSoilCondition] = useState("");
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState({});
+
+  const background = useThemeColor({}, 'background');
+  const card = useThemeColor({}, 'card');
+  const text = useThemeColor({}, 'text');
+  const mutedText = useThemeColor({}, 'mutedText');
+  const border = useThemeColor({}, 'border');
+  const primary = useThemeColor({}, 'primary');
+  const danger = useThemeColor({}, 'danger');
 
   function validate() {
     const e = {};
@@ -74,8 +86,11 @@ export function ObservationForm({ fields, onSubmit, loading }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>Field *</Text>
+    <ScrollView
+      style={{ backgroundColor: background }}
+      contentContainerStyle={styles.container}
+    >
+      <Text style={[styles.label, { color: text }]}>Field *</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -84,28 +99,31 @@ export function ObservationForm({ fields, onSubmit, loading }) {
         {fields.map((f) => (
           <TouchableOpacity
             key={f.id}
-            style={[styles.chip, fieldId === f.id && styles.chipSelected]}
+            style={[
+              styles.chip,
+              { backgroundColor: card, borderColor: border },
+              fieldId === f.id && { backgroundColor: primary, borderColor: primary },
+            ]}
             onPress={() => {
               setFieldId(f.id);
               setErrors((prev) => ({ ...prev, fieldId: undefined }));
             }}
           >
-            <Text
-              style={[
-                styles.chipText,
-                fieldId === f.id && styles.chipTextSelected,
-              ]}
-            >
+            <Text style={[
+              styles.chipText,
+              { color: text },
+              fieldId === f.id && styles.chipTextSelected,
+            ]}>
               {f.name}
             </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
       {!!errors.fieldId && (
-        <Text style={styles.error}>{errors.fieldId}</Text>
+        <Text style={[styles.error, { color: danger }]}>{errors.fieldId}</Text>
       )}
 
-      <Text style={styles.label}>Growth Stage *</Text>
+      <Text style={[styles.label, { color: text }]}>Growth Stage *</Text>
       <ChipRow
         options={GROWTH_STAGES}
         selected={growthStage}
@@ -113,30 +131,42 @@ export function ObservationForm({ fields, onSubmit, loading }) {
           setGrowthStage(v);
           setErrors((prev) => ({ ...prev, growthStage: undefined }));
         }}
+        card={card}
+        border={border}
+        primary={primary}
+        text={text}
       />
       {!!errors.growthStage && (
-        <Text style={styles.error}>{errors.growthStage}</Text>
+        <Text style={[styles.error, { color: danger }]}>{errors.growthStage}</Text>
       )}
 
-      <Text style={styles.label}>Pest Sighting</Text>
+      <Text style={[styles.label, { color: text }]}>Pest Sighting</Text>
       <ChipRow
         options={PEST_OPTIONS}
         selected={pestSighting}
         onSelect={setPestSighting}
+        card={card}
+        border={border}
+        primary={primary}
+        text={text}
       />
 
-      <Text style={styles.label}>Soil Condition</Text>
+      <Text style={[styles.label, { color: text }]}>Soil Condition</Text>
       <ChipRow
         options={SOIL_OPTIONS}
         selected={soilCondition}
         onSelect={setSoilCondition}
+        card={card}
+        border={border}
+        primary={primary}
+        text={text}
       />
 
-      <Text style={styles.label}>Notes</Text>
+      <Text style={[styles.label, { color: text }]}>Notes</Text>
       <TextInput
-        style={styles.textArea}
+        style={[styles.textArea, { borderColor: border, color: text, backgroundColor: card }]}
         placeholder="Any additional observations..."
-        placeholderTextColor={theme.colours.mutedText}
+        placeholderTextColor={mutedText}
         value={notes}
         onChangeText={setNotes}
         multiline
@@ -145,7 +175,7 @@ export function ObservationForm({ fields, onSubmit, loading }) {
       />
 
       <TouchableOpacity
-        style={[styles.button, loading && styles.buttonDisabled]}
+        style={[styles.button, { backgroundColor: primary }, loading && styles.buttonDisabled]}
         onPress={handleSubmit}
         disabled={loading}
       >
@@ -167,7 +197,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: theme.fontSize.body,
     fontWeight: "600",
-    color: theme.colours.text,
     marginTop: theme.spacing.md,
     marginBottom: theme.spacing.sm,
   },
@@ -179,40 +208,28 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
     borderRadius: theme.radius.lg,
     borderWidth: 1,
-    borderColor: theme.colours.border,
     marginRight: theme.spacing.sm,
-    backgroundColor: theme.colours.card,
-  },
-  chipSelected: {
-    backgroundColor: theme.colours.primary,
-    borderColor: theme.colours.primary,
-  },
-  chipText: {
-    fontSize: theme.fontSize.small,
-    color: theme.colours.text,
   },
   chipTextSelected: {
     color: "#fff",
     fontWeight: "600",
   },
+  chipText: {
+    fontSize: theme.fontSize.small,
+  },
   textArea: {
     borderWidth: 1,
-    borderColor: theme.colours.border,
     borderRadius: theme.radius.md,
     padding: theme.spacing.md,
     fontSize: theme.fontSize.body,
-    color: theme.colours.text,
-    backgroundColor: theme.colours.card,
     minHeight: 100,
   },
   error: {
     fontSize: theme.fontSize.small,
-    color: theme.colours.danger,
     marginTop: 4,
   },
   button: {
     marginTop: theme.spacing.lg,
-    backgroundColor: theme.colours.primary,
     borderRadius: theme.radius.md,
     padding: theme.spacing.md,
     alignItems: "center",

@@ -8,6 +8,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { addObs } from "../services/firebase/firestore";
 import { ObservationForm } from "../components/forms/ObservationForm";
 import { theme } from "../constants/theme";
+import { useThemeColor } from "../hooks/useThemeColor";
 
 import { isOnline } from "../services/offline/networkStatus";
 import { addToSyncQueue } from "../services/offline/syncQueue";
@@ -17,19 +18,23 @@ export default function AddObservationScreen() {
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
 
+  const background = useThemeColor({}, 'background');
+  const text = useThemeColor({}, 'text');
+  const mutedText = useThemeColor({}, 'mutedText');
+  const border = useThemeColor({}, 'border');
+  const primary = useThemeColor({}, 'primary');
+
   if (!fields.length) {
     return (
-      <View style={styles.noFields}>
-        <Ionicons name="leaf-outline" size={48} color={theme.colours.border} />
-
-        <Text style={styles.noFieldsTitle}>No fields yet</Text>
-
-        <Text style={styles.noFieldsSubtitle}>
+      <View style={[styles.noFields, { backgroundColor: background }]}>
+        <Ionicons name="leaf-outline" size={48} color={border} />
+        <Text style={[styles.noFieldsTitle, { color: text }]}>No fields yet</Text>
+        <Text style={[styles.noFieldsSubtitle, { color: mutedText }]}>
           Add a field before recording an observation.
         </Text>
 
         <TouchableOpacity
-          style={styles.goButton}
+          style={[styles.goButton, { backgroundColor: primary }]}
           onPress={() => router.replace("/(tabs)/fields")}
         >
           <Text style={styles.goButtonText}>Go to Fields</Text>
@@ -75,12 +80,8 @@ export default function AddObservationScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <ObservationForm
-        fields={fields}
-        onSubmit={handleSubmit}
-        loading={loading}
-      />
+    <View style={[styles.container, { backgroundColor: background }]}>
+      <ObservationForm fields={fields} onSubmit={handleSubmit} loading={loading} />
     </View>
   );
 }
@@ -88,30 +89,25 @@ export default function AddObservationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colours.background,
   },
   noFields: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     padding: theme.spacing.lg,
-    backgroundColor: theme.colours.background,
   },
   noFieldsTitle: {
     fontSize: theme.fontSize.subtitle,
     fontWeight: "600",
-    color: theme.colours.text,
     marginTop: theme.spacing.md,
   },
   noFieldsSubtitle: {
     fontSize: theme.fontSize.body,
-    color: theme.colours.mutedText,
     textAlign: "center",
     marginTop: theme.spacing.sm,
     marginBottom: theme.spacing.lg,
   },
   goButton: {
-    backgroundColor: theme.colours.primary,
     borderRadius: theme.radius.md,
     paddingHorizontal: theme.spacing.xl,
     paddingVertical: theme.spacing.md,
