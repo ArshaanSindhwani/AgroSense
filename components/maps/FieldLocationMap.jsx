@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import { WebView } from "react-native-webview";
 
 import { theme } from "../../constants/theme";
 
@@ -22,6 +22,52 @@ function getFieldCoordinates(field) {
     latitude: Number(latitude),
     longitude: Number(longitude),
   };
+}
+
+function buildMapHtml({ latitude, longitude, fieldName }) {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    html, body, #map {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    const latitude = ${latitude};
+    const longitude = ${longitude};
+    const fieldName = ${JSON.stringify(fieldName || "Field")};
+
+    const map = L.map("map", {
+      zoomControl: true,
+      attributionControl: true
+    }).setView([latitude, longitude], 16);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "© OpenStreetMap contributors"
+    }).addTo(map);
+
+    L.marker([latitude, longitude])
+      .addTo(map)
+      .bindPopup(fieldName)
+      .openPopup();
+  </script>
+</body>
+</html>
+`;
 }
 
 export default function FieldLocationMap({ field }) {
@@ -49,12 +95,11 @@ export default function FieldLocationMap({ field }) {
     );
   }
 
-  const region = {
+  const html = buildMapHtml({
     latitude: coordinates.latitude,
     longitude: coordinates.longitude,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
+    fieldName: field.name,
+  });
 
   return (
     <View style={styles.card}>
@@ -65,13 +110,13 @@ export default function FieldLocationMap({ field }) {
         </Text>
       </View>
 
-      <MapView style={styles.map} initialRegion={region} region={region}>
-        <Marker
-          coordinate={coordinates}
-          title={field.name || "Field"}
-          description={field.postcode || field.cropType || "Saved field"}
-        />
-      </MapView>
+      <WebView
+        originWhitelist={["*"]}
+        source={{ html }}
+        style={styles.map}
+        javaScriptEnabled
+        domStorageEnabled
+      />
     </View>
   );
 }

@@ -19,10 +19,12 @@ import { deleteFarm } from "../../services/firebase/firestore";
 import { WeatherCard } from "../../components/cards/WeatherCard";
 import { FarmCard } from "../../components/cards/FarmCard";
 import FieldLocationMap from "../../components/maps/FieldLocationMap";
+import { isOnline } from "../../services/offline/networkStatus";
 
 export default function HomeScreen() {
   const router = useRouter();
   const { farms, fields, loading, refresh } = useFarmContext();
+
   const [weather, setWeather] = useState(null);
   const [selectedFarm, setSelectedFarm] = useState(null);
   const [selectedField, setSelectedField] = useState(null);
@@ -63,7 +65,9 @@ export default function HomeScreen() {
 
   useEffect(() => {
     async function loadWeather() {
-      if (!selectedFarm?.location) {
+      const postcode = selectedFarm?.location?.trim();
+
+      if (!postcode) {
         setWeather(null);
         return;
       }
@@ -71,15 +75,20 @@ export default function HomeScreen() {
       setWeatherLoading(true);
 
       try {
-        const coords = await getCoordinatesFromPostcode(selectedFarm.location);
+        const coords = await getCoordinatesFromPostcode(postcode);
+
+        if (!coords?.latitude || !coords?.longitude) {
+          setWeather(null);
+          return;
+        }
+
         const data = await getWeatherData(coords.latitude, coords.longitude);
 
         setWeather({
           ...data,
-          place: coords.location,
+          place: coords.location || postcode,
         });
-      } catch (err) {
-        console.log("Weather unavailable:", err.message);
+      } catch {
         setWeather(null);
       } finally {
         setWeatherLoading(false);
@@ -88,6 +97,20 @@ export default function HomeScreen() {
 
     loadWeather();
   }, [selectedFarm]);
+
+  async function requireInternet(action) {
+    const online = await isOnline();
+
+    if (!online) {
+      Alert.alert(
+        "Feature unavailable offline",
+        "This feature requires an internet connection. Please reconnect and try again."
+      );
+      return;
+    }
+
+    action();
+  }
 
   function confirmDeleteFarm(farm) {
     Alert.alert(
@@ -99,6 +122,16 @@ export default function HomeScreen() {
           text: "Delete",
           style: "destructive",
           onPress: async () => {
+            const online = await isOnline();
+
+            if (!online) {
+              Alert.alert(
+                "Feature unavailable offline",
+                "Deleting a farm requires an internet connection. Please reconnect and try again."
+              );
+              return;
+            }
+
             try {
               await deleteFarm(farm.id);
 
@@ -196,7 +229,7 @@ export default function HomeScreen() {
 
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => router.push("/add-farm")}
+        onPress={() => requireInternet(() => router.push("/add-farm"))}
         activeOpacity={0.85}
       >
         <Ionicons name="add" size={28} color="#FFFFFF" />
