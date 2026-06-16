@@ -132,6 +132,7 @@ const validate = () => {
           onPress={handleSubmit}
           activeOpacity={0.85}
           disabled={loading}
+          testID="save-farm-button"
         >
           {loading ? (
             <ActivityIndicator color="#FFFFFF" />

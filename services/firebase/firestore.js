@@ -1,25 +1,25 @@
 import firestore from "@react-native-firebase/firestore";
 
 // Users
-async function createUser(userId, profile) {
-  return firestore()
-    .collection("users")
-    .doc(userId)
-    .set({ ...profile, createdAt: firestore.FieldValue.serverTimestamp() });
-}
+// async function createUser(userId, profile) {
+//   return firestore()
+//     .collection("users")
+//     .doc(userId)
+//     .set({ ...profile, createdAt: firestore.FieldValue.serverTimestamp() });
+// }
 
-async function deleteUser(userId) {
-  return firestore().collection("users").doc(userId).delete();
-}
+// async function deleteUser(userId) {
+//   return firestore().collection("users").doc(userId).delete();
+// }
 
-async function getUser(userId) {
-  const doc = await firestore().collection("users").doc(userId).get();
-  return { id: doc.id, ...doc.data() };
-}
+// async function getUser(userId) {
+//   const doc = await firestore().collection("users").doc(userId).get();
+//   return { id: doc.id, ...doc.data() };
+// }
 
-async function updateUser(userId, updates) {
-  return firestore().collection("users").doc(userId).update(updates);
-}
+// async function updateUser(userId, updates) {
+//   return firestore().collection("users").doc(userId).update(updates);
+// }
 
 // Farms
 async function addFarm(userId, data) {
@@ -111,5 +111,5 @@ export {
   addField, deleteField, getFieldsByFarmIds, getField, updateField,
   addObs, deleteObs, getObs, updateObs,
   addRecommendation, getFieldRecommendations,
-  createUser, deleteUser, getUser, updateUser,
+ // createUser, deleteUser, getUser, updateUser,
 };
