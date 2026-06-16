@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.05% </span>
+                <span class="strong">57.89% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/19</span>
+                <span class='fraction'>11/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">37.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/8</span>
+                <span class='fraction'>3/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/5</span>
+                <span class='fraction'>2/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">61.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/18</span>
+                <span class='fraction'>11/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -113,65 +113,65 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">44x</span>
-<span class="cline-any cline-yes">44x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2095x</span>
+<span class="cline-any cline-yes">2095x</span>
+<span class="cline-any cline-yes">2095x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {createContext, useContext, useState} from "react"
 import {useColorScheme} from "../hooks/useColorScheme"
 &nbsp;
 const ThemeContext = createContext()
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >ThemeProvider(</span>{children}){
-    const systemScheme = <span class="cstat-no" title="statement not covered" >useColorScheme()</span>
-    const [override, setOverride] = <span class="cstat-no" title="statement not covered" >useState(null)</span>
+export function ThemeProvider({children}){
+    const systemScheme = useColorScheme()
+    const [override, setOverride] = useState(null)
 &nbsp;
     let isDark
-<span class="cstat-no" title="statement not covered" >    if (override !== null) {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (override !== null) {
 <span class="cstat-no" title="statement not covered" >        isDark = override</span>
     } else {
-<span class="cstat-no" title="statement not covered" >        isDark = systemScheme === "dark"</span>
+        isDark = systemScheme === "dark"
     }
 &nbsp;
     let colorScheme
-<span class="cstat-no" title="statement not covered" >    if (isDark) {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (isDark) {
 <span class="cstat-no" title="statement not covered" >        colorScheme = "dark"</span>
     } else {
-<span class="cstat-no" title="statement not covered" >        colorScheme = "light"</span>
+        colorScheme = "light"
     }
 &nbsp;
     function <span class="fstat-no" title="function not covered" >toggleTheme(</span>) {
@@ -186,15 +186,15 @@ export function <span class="fstat-no" title="function not covered" >ThemeProvid
 <span class="cstat-no" title="statement not covered" >        setOverride(null)</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
         &lt;ThemeContext.Provider value={{isDark, colorScheme, toggleTheme, resetToSystem}}&gt;{children}&lt;/ThemeContext.Provider&gt;
     )
 }
 &nbsp;
 export function useTheme(){
     const context = useContext(ThemeContext)
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!context) throw new Error('useTheme must be used within ThemeProvider')
-<span class="cstat-no" title="statement not covered" >        return context</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!context) <span class="cstat-no" title="statement not covered" >throw new Error('useTheme must be used within ThemeProvider')</span>
+        return context
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -202,7 +202,7 @@ export function useTheme(){
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-16T11:13:07.027Z
+                at 2026-06-16T14:49:47.511Z
             </div>
         <script src="../prettify.js"></script>
         <script>

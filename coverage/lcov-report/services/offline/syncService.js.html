@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>23/23</span>
+                <span class='fraction'>27/27</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>23/23</span>
+                <span class='fraction'>27/27</span>
             </div>
         
             
@@ -133,14 +133,8 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,6 +149,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
@@ -167,10 +163,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,13 +178,16 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,6 +198,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,16 +206,9 @@
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { isOnline } from "./networkStatus";
-import {
-  getSyncQueue,
-  removeFromSyncQueue,
-} from "./syncQueue";
+import { getSyncQueue, removeFromSyncQueue } from "./syncQueue";
 &nbsp;
-import {
-  addFarm,
-  addField,
-  addObs,
-} from "../firebase/firestore";
+import { addFarm, addField, addObs } from "../firebase/firestore";
 &nbsp;
 let syncing = false;
 &nbsp;
@@ -221,11 +216,13 @@ export async function syncOfflineQueue() {
   if (syncing) {
     return {
       success: false,
+      syncedCount: 0,
       message: "Sync already running.",
     };
   }
 &nbsp;
   syncing = true;
+  let syncedCount = 0;
 &nbsp;
   try {
     const online = await isOnline();
@@ -233,6 +230,7 @@ export async function syncOfflineQueue() {
     if (!online) {
       return {
         success: false,
+        syncedCount: 0,
         message: "Device is offline.",
       };
     }
@@ -242,6 +240,7 @@ export async function syncOfflineQueue() {
     if (!queue.length) {
       return {
         success: true,
+        syncedCount: 0,
         message: "No offline items to sync.",
       };
     }
@@ -250,14 +249,17 @@ export async function syncOfflineQueue() {
       try {
         if (item.type === "CREATE_FARM") {
           await addFarm(item.payload.userId, item.payload.data);
+          syncedCount++;
         }
 &nbsp;
         if (item.type === "CREATE_FIELD") {
           await addField(item.payload);
+          syncedCount++;
         }
 &nbsp;
         if (item.type === "CREATE_OBSERVATION") {
           await addObs(item.payload);
+          syncedCount++;
         }
 &nbsp;
         await removeFromSyncQueue(item.id);
@@ -268,6 +270,7 @@ export async function syncOfflineQueue() {
 &nbsp;
     return {
       success: true,
+      syncedCount,
       message: "Offline sync complete.",
     };
   } finally {
@@ -280,7 +283,7 @@ export async function syncOfflineQueue() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-16T11:13:07.027Z
+                at 2026-06-16T14:49:47.511Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

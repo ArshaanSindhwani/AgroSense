@@ -34,7 +34,7 @@ describe("syncService", () => {
 
     const result = await syncOfflineQueue();
 
-    expect(result).toEqual({ success: false, message: "Device is offline." });
+    expect(result).toEqual({ success: false, message: "Device is offline.", syncedCount: 0 });
     expect(getSyncQueueMock).not.toHaveBeenCalled();
   });
 
@@ -47,6 +47,7 @@ describe("syncService", () => {
     expect(result).toEqual({
       success: true,
       message: "No offline items to sync.",
+      syncedCount: 0
     });
   });
 
@@ -65,7 +66,7 @@ describe("syncService", () => {
 
     expect(addFarm).toHaveBeenCalledWith("u1", { name: "Farm A" });
     expect(removeFromSyncQueueMock).toHaveBeenCalledWith("farm-1");
-    expect(result).toEqual({ success: true, message: "Offline sync complete." });
+    expect(result).toEqual({ success: true, message: "Offline sync complete.", syncedCount: 1 });
   });
 
   it("processes CREATE_FIELD items", async () => {
@@ -123,7 +124,7 @@ describe("syncService", () => {
 
     expect(removeFromSyncQueueMock).not.toHaveBeenCalledWith("fail-1");
     expect(removeFromSyncQueueMock).toHaveBeenCalledWith("ok-1");
-    expect(result).toEqual({ success: true, message: "Offline sync complete." });
+    expect(result).toEqual({ success: true, message: "Offline sync complete.", syncedCount: 1 });
   });
 
   it("resets the syncing flag after completion (allows re-run)", async () => {
@@ -136,6 +137,7 @@ describe("syncService", () => {
     expect(second).toEqual({
       success: true,
       message: "No offline items to sync.",
+      syncedCount: 0
     });
   });
 
