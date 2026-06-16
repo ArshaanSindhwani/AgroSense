@@ -2,17 +2,23 @@ import {useState} from 'react'
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import {useAuthContext} from '../../context/AuthContext'
 import { InlineSpinner} from '../shared/LoadingSpinner'
+import { Ionicons } from '@expo/vector-icons'  
 
 export default function RegisterForm() {
     const {register, error} = useAuthContext()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
     const [loading, setLoading] = useState(false)
+    
 
     async function handleRegister() {
         setErrorMessage('')
+        setSuccessMessage('')
 
         if (!email || !password || !confirmPassword) {
             setErrorMessage('Please fill in all the fields.')
@@ -32,6 +38,7 @@ export default function RegisterForm() {
         try {
             setLoading(true)
             await register(email.trim(), password)
+            setSuccessMessage('Account successfully created!')
         } catch (error) {
             setErrorMessage(error.message)
         } finally {
@@ -42,9 +49,23 @@ export default function RegisterForm() {
     return (
             <View style={styles.container}>
                 <Text style={styles.title}>Register</Text>
+
+                {successMessage ? (
+                    <View style={styles.successContainer}>
+                        <Text style={styles.successText}>{successMessage}</Text>
+                    </View>
+                ) : null}
     
                 {errorMessage ? (
-                    <Text style={styles.error}>{errorMessage}</Text>
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.errorText}>{errorMessage}</Text>
+                    </View>
+                ) : null}
+
+                {error ? (
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.errorText}>{error}</Text>
+                    </View>
                 ) : null}
     
                 <TextInput
@@ -56,22 +77,47 @@ export default function RegisterForm() {
                 keyboardType="email-address"
                 />
     
+                <View style={styles.inputWrapper}>
                 <TextInput
-                style={styles.input}
+                style={styles.inputWithIcon}
                 placeholder="Password"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry
+                secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 />
+                <TouchableOpacity
+                style={styles.eyeButton}
+                onPress={() => setShowPassword(prev => !prev)}
+                >
+                <Ionicons
+                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                    size={20}
+                    color="#52796F"
+                />
+                </TouchableOpacity>
+            </View>
 
-                <TextInput 
-                style={styles.input}
+            <View style={styles.inputWrapper}>
+                <TextInput
+                style={styles.inputWithIcon}
                 placeholder="Confirm your password"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry
-                autoCapitalize="none"/>
+                secureTextEntry={!showConfirmPassword}
+                autoCapitalize="none"
+                />
+                <TouchableOpacity
+                style={styles.eyeButton}
+                onPress={() => setShowConfirmPassword(prev => !prev)}
+                >
+                <Ionicons
+                    name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+                    size={20}
+                    color="#52796F"
+                />
+                </TouchableOpacity>
+            </View>
     
                 <TouchableOpacity
                 style={[styles.button, loading && styles.buttonDisabled]}
@@ -101,43 +147,76 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
 
+    successContainer: {
+        backgroundColor: '#DCFCE7',
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 12,
+    },
+
+    successText: {
+        color: '#15803D',
+        fontSize: 14,
+    },
+
     error: {
         backgroundColor: '#FDECEA',
-    color: '#691b29',
-    fontSize: 14,
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-    overflow: 'hidden',
+        color: '#691b29',
+        fontSize: 14,
+        padding: 12,
+        borderRadius: 8,
+        marginBottom: 12,
+        overflow: 'hidden',
     },
 
     input: {
-    borderWidth: 1,
-    borderColor: '#95D5B2',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 16,
-    backgroundColor: '#F0FAF4',
-    color: '#1B4332',
+        borderWidth: 1,
+        borderColor: '#95D5B2',
+        borderRadius: 8,
+        padding: 12,
+        fontSize: 16,
+        marginBottom: 16,
+        backgroundColor: '#F0FAF4',
+        color: '#1B4332',
+    },
+
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#95D5B2',
+        borderRadius: 8,
+        backgroundColor: '#F0FAF4',
+        marginBottom: 16,
+    },
+
+    inputWithIcon: {
+        flex: 1,
+        padding: 12,
+        fontSize: 16,
+        color: '#1B4332',
+    },
+
+    eyeButton: {
+        padding: 12,
     },
 
     button: {
-    backgroundColor: '#2D6A4F',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 8
+        backgroundColor: '#2D6A4F',
+        borderRadius: 8,
+        padding: 16,
+        alignItems: 'center',
+        marginTop: 8
     },
 
     buttonDisabled: {
-    opacity: 0.6,
+        opacity: 0.6,   
     },
 
     buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600'
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: '600'
     }
 
 })

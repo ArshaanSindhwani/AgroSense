@@ -1,7 +1,8 @@
 import { COLOURS } from "./colours";
+import { useColorScheme } from "react-native";
 
 export const theme = {
-  colours: COLOURS,
+  colours: COLOURS.light,
 
   spacing: {
     xs: 4,

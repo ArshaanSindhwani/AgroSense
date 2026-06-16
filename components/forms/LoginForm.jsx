@@ -10,12 +10,14 @@ import {
 
 import { useAuthContext } from "../../context/AuthContext.jsx";
 import { InlineSpinner } from "../shared/LoadingSpinner";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function LoginForm() {
   const { login } = useAuthContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -54,14 +56,26 @@ export default function LoginForm() {
         keyboardType="email-address"
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#52796F"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+      <View style={styles.inputWrapper}>
+        <TextInput
+          style={styles.inputWithIcon}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+          autoCapitalize="none"
+        />
+        <TouchableOpacity
+          style={styles.eyeButton}
+          onPress={() => setShowPassword(prev => !prev)}
+        >
+          <Ionicons
+            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+            size={20}
+            color="#52796F"
+          />
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
         style={styles.button}
@@ -109,6 +123,27 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: "#F0FAF4",
     color: "#1B4332",
+  },
+
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#95D5B2',
+    borderRadius: 8,
+    backgroundColor: '#F0FAF4',
+    marginBottom: 16,
+  },
+
+  inputWithIcon: {
+    flex: 1,
+    padding: 12,
+    fontSize: 16,
+    color: '#1B4332',
+  },
+  
+  eyeButton: {
+    padding: 12,
   },
 
   button: {

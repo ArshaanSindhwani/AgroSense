@@ -38,7 +38,6 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
-google-services.json
 package-lock.json
 
 # generated native folders
