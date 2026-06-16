@@ -37,6 +37,10 @@ async function getFarmsByUser(userId) {
   return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 
+async function deleteFarm(farmId) {
+  return firestore().collection("farms").doc(farmId).delete();
+}
+
 // Fields
 async function addField(field) {
   const ref = await firestore()
@@ -111,5 +115,6 @@ export {
   addField, deleteField, getFieldsByFarmIds, getField, updateField,
   addObs, deleteObs, getObs, updateObs,
   addRecommendation, getFieldRecommendations,
+  deleteFarm,
  // createUser, deleteUser, getUser, updateUser,
 };
