@@ -24,9 +24,10 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="addFarm"
+        name="dashboard"
         options={{
-          title: "Add Farm",
+          title: "Home",
+          tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="grid-outline" size={size} color={color} />
           ),
