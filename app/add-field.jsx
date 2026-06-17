@@ -35,12 +35,12 @@ export default function AddFieldScreen() {
         return;
       }
 
-      const postcode = data.postcode?.trim();
-
+      const farm = farms.find((f) => f.id === data.farmId);
+      const postcode = farm?.location?.trim();
       if (!postcode) {
         Alert.alert(
           "Missing postcode",
-          "Please enter a valid UK postcode before adding a field."
+          "This farm has no postcode yet"
         );
         return;
       }
