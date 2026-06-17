@@ -22,7 +22,7 @@ import { generateRecommendation } from "../../services/ai/recommendationService"
 
 export default function SettingsScreen() {
   const { user, logout } = useAuthContext();
-  const {isDark, toggleTheme, resetToSystem} = useTheme()
+  const {isDark, toggleTheme} = useTheme()
 
   const background = useThemeColor({}, 'background')
   const card = useThemeColor({}, "card")
@@ -132,17 +132,6 @@ export default function SettingsScreen() {
             trackColor = {{false: border, true: primary}}
             thumbColor = {card}/>
         </View>
-
-        <TouchableOpacity
-          style={[styles.row, { borderBottomWidth: 0 }]}
-          onPress={resetToSystem}>
-            <Ionicons
-              name="phone-portrait-outline"
-              size={18}
-              color={mutedText}
-              style={styles.rowIcon}/>
-            <Text style={[styles.rowLabel, { color: mutedText }]}>Reset to system setting</Text>
-        </TouchableOpacity>
       </View>
 
       <TouchableOpacity

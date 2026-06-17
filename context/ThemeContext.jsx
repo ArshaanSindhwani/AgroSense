@@ -29,12 +29,8 @@ export function ThemeProvider({children}){
         })
     }
 
-    function resetToSystem() {
-        setOverride(null)
-    }
-
     return (
-        <ThemeContext.Provider value={{isDark, colorScheme, toggleTheme, resetToSystem}}>{children}</ThemeContext.Provider>
+        <ThemeContext.Provider value={{isDark, colorScheme, toggleTheme}}>{children}</ThemeContext.Provider>
     )
 }
 
