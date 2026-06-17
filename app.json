@@ -1,8 +1,8 @@
 {
   "expo": {
     "owner": "projectgamma",
-    "name": "project-gamma",
-    "slug": "project-gamma",
+    "name": "AgroSense",
+    "slug": "agrosense",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -38,7 +38,7 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#ffffff"
           }
         }
       ],
