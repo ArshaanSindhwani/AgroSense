@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1781690216588" clover="3.2.0">
-  <project timestamp="1781690216588" name="All files">
-    <metrics statements="383" coveredstatements="276" conditionals="278" coveredconditionals="195" methods="99" coveredmethods="71" elements="760" coveredelements="542" complexity="0" loc="383" ncloc="383" packages="12" files="25" classes="25"/>
+<coverage generated="1781691463826" clover="3.2.0">
+  <project timestamp="1781691463826" name="All files">
+    <metrics statements="319" coveredstatements="281" conditionals="236" coveredconditionals="196" methods="82" coveredmethods="71" elements="637" coveredelements="548" complexity="0" loc="319" ncloc="319" packages="12" files="23" classes="23"/>
     <package name="app">
-      <metrics statements="14" coveredstatements="4" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="1"/>
+      <metrics statements="14" coveredstatements="14" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
       <file name="add-farm.jsx" path="C:\Users\sajan\work\project-gamma\app\add-farm.jsx">
-        <metrics statements="14" coveredstatements="4" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="1"/>
-        <line num="11" count="31" type="stmt"/>
-        <line num="12" count="31" type="stmt"/>
-        <line num="13" count="31" type="stmt"/>
-        <line num="14" count="30" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
+        <metrics statements="14" coveredstatements="14" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="11" count="22" type="stmt"/>
+        <line num="12" count="22" type="stmt"/>
+        <line num="13" count="22" type="stmt"/>
+        <line num="14" count="22" type="stmt"/>
+        <line num="16" count="22" type="stmt"/>
+        <line num="17" count="10" type="stmt"/>
+        <line num="18" count="10" type="stmt"/>
+        <line num="19" count="10" type="stmt"/>
+        <line num="24" count="7" type="stmt"/>
+        <line num="25" count="7" type="stmt"/>
+        <line num="26" count="7" type="stmt"/>
+        <line num="28" count="3" type="stmt"/>
+        <line num="30" count="10" type="stmt"/>
+        <line num="34" count="22" type="stmt"/>
       </file>
     </package>
     <package name="app.(tabs)">
@@ -118,42 +118,7 @@
       </file>
     </package>
     <package name="components.forms">
-      <metrics statements="67" coveredstatements="36" conditionals="60" coveredconditionals="25" methods="23" coveredmethods="11"/>
-      <file name="AddFarmForm.jsx" path="C:\Users\sajan\work\project-gamma\components\forms\AddFarmForm.jsx">
-        <metrics statements="32" coveredstatements="1" conditionals="34" coveredconditionals="0" methods="12" coveredmethods="0"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="99" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="146" count="0" type="stmt"/>
-        <line num="156" count="1" type="stmt"/>
-      </file>
+      <metrics statements="35" coveredstatements="35" conditionals="26" coveredconditionals="25" methods="11" coveredmethods="11"/>
       <file name="ObservationForm.jsx" path="C:\Users\sajan\work\project-gamma\components\forms\ObservationForm.jsx">
         <metrics statements="35" coveredstatements="35" conditionals="26" coveredconditionals="25" methods="11" coveredmethods="11"/>
         <line num="15" count="1" type="stmt"/>
@@ -206,67 +171,32 @@
       </file>
       <file name="colours.js" path="C:\Users\sajan\work\project-gamma\constants\colours.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
       </file>
       <file name="theme.js" path="C:\Users\sajan\work\project-gamma\constants\theme.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="4" count="3" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
       </file>
     </package>
     <package name="context">
-      <metrics statements="50" coveredstatements="15" conditionals="16" coveredconditionals="4" methods="10" coveredmethods="3"/>
-      <file name="FarmContext.jsx" path="C:\Users\sajan\work\project-gamma\context\FarmContext.jsx">
-        <metrics statements="32" coveredstatements="4" conditionals="8" coveredconditionals="1" methods="5" coveredmethods="1"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="67" count="30" type="stmt"/>
-        <line num="68" count="30" type="cond" truecount="1" falsecount="1"/>
-        <line num="69" count="30" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-      </file>
+      <metrics statements="18" coveredstatements="11" conditionals="8" coveredconditionals="3" methods="5" coveredmethods="2"/>
       <file name="ThemeContext.jsx" path="C:\Users\sajan\work\project-gamma\context\ThemeContext.jsx">
         <metrics statements="18" coveredstatements="11" conditionals="8" coveredconditionals="3" methods="5" coveredmethods="2"/>
-        <line num="4" count="2" type="stmt"/>
-        <line num="7" count="37" type="stmt"/>
-        <line num="8" count="37" type="stmt"/>
-        <line num="11" count="37" type="cond" truecount="1" falsecount="1"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="7" type="stmt"/>
+        <line num="8" count="7" type="stmt"/>
+        <line num="11" count="7" type="cond" truecount="1" falsecount="1"/>
         <line num="12" count="0" type="stmt"/>
-        <line num="14" count="37" type="stmt"/>
-        <line num="18" count="37" type="cond" truecount="1" falsecount="1"/>
+        <line num="14" count="7" type="stmt"/>
+        <line num="18" count="7" type="cond" truecount="1" falsecount="1"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="21" count="37" type="stmt"/>
+        <line num="21" count="7" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="36" count="37" type="stmt"/>
+        <line num="36" count="7" type="stmt"/>
         <line num="42" count="91" type="stmt"/>
         <line num="43" count="91" type="cond" truecount="1" falsecount="1"/>
         <line num="44" count="91" type="stmt"/>
