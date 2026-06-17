@@ -35,7 +35,7 @@ export default function AddObservationScreen() {
 
         <TouchableOpacity
           style={[styles.goButton, { backgroundColor: primary }]}
-          onPress={() => router.replace("/(tabs)/fields")}
+          onPress={() => router.replace("/fields")}
         >
           <Text style={styles.goButtonText}>Go to Fields</Text>
         </TouchableOpacity>
@@ -61,7 +61,7 @@ export default function AddObservationScreen() {
           "Your observation has been saved offline and will sync when the internet connection has been restored."
         );
 
-        router.replace("/(tabs)/observations");
+        router.replace("/observations");
         return;
       }
 
@@ -71,7 +71,7 @@ export default function AddObservationScreen() {
       await refresh();
 
       Alert.alert("Saved", "Observation saved successfully.");
-      router.replace("/(tabs)/observations");
+      router.replace("/observations");
     } catch (err) {
       Alert.alert("Error", err.message || "Could not save observation.");
     } finally {

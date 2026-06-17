@@ -4,11 +4,15 @@ import { useAuthContext } from "../context/AuthContext";
 import { FullScreenSpinner } from "../components/shared/LoadingSpinner";
 
 export default function Index() {
-  const { user, loading } = useAuthContext();
+const { user, loading } = useAuthContext();
 
-  if (loading) return <FullScreenSpinner />;
+if (loading) {
+return <FullScreenSpinner />;
+}
 
-  if (user) return <Redirect href="/(tabs)/addFarm" />;
+if (user) {
+return <Redirect href="/(tabs)/dashboard" />;
+}
 
-  return <Redirect href="/(auth)/login" />;
+return <Redirect href="/(auth)/login" />;
 }

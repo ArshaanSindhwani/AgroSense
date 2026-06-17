@@ -7,7 +7,7 @@ import { NetworkIndicator } from "../../components/shared/NetworkIndicator";
 export default function TabsLayout() {
   const { user, loading } = useAuthContext();
   if (loading) return null;
-  if (!user) return <Redirect href="/(auth)/login"/>;
+  if (!user) return <Redirect href="/(auth)/login" />;
   return (
     <Tabs
       screenOptions={{
@@ -26,9 +26,10 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="addFarm"
+        name="dashboard"
         options={{
-          title: "Add Farm",
+          title: "Home",
+          tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="grid-outline" size={size} color={color} />
           ),
@@ -58,7 +59,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="recommendations"
         options={{
-          title: "Recommendations",
+          title: "Suggestions",
           tabBarLabel: "Advice",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bulb-outline" size={size} color={color} />

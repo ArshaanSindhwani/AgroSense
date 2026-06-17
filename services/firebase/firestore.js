@@ -12,6 +12,10 @@ async function addFarm(userId, data) {
   return ref.id;
 }
 
+async function deleteFarm(farmId) {
+  return firestore().collection("farms").doc(farmId).delete();
+}
+
 async function getFarmsByUser(userId) {
   const snap = await firestore()
     .collection("farms")
@@ -154,6 +158,7 @@ function getItemTime(item) {
 
 export {
   addFarm,
+  deleteFarm,
   getFarmsByUser,
   addField,
   deleteField,
@@ -167,4 +172,5 @@ export {
   addRecommendation,
   getRecommendations,
   getFieldRecommendations,
+  getItemTime
 };
