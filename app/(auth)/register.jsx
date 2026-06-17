@@ -22,7 +22,7 @@ export default function RegisterScreen() {
                 </View>
     
                 <View style={styles.login}>
-                  <Text style={styles.loginText}>Already have an account?</Text>
+                  <Text style={styles.loginText}>Already have an account? </Text>
                   <Link href='/(auth)/login' asChild>
                     <TouchableOpacity>
                       <Text style={styles.loginLink}>Log In</Text>
