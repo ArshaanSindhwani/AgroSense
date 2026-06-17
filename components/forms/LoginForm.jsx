@@ -64,6 +64,7 @@ export default function LoginForm() {
         <TextInput
           style={styles.inputWithIcon}
           placeholder="Password"
+          placeholderTextColor="#52796F"
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}

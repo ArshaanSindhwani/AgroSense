@@ -71,6 +71,7 @@ export default function RegisterForm() {
                 <TextInput
                 style={styles.input}
                 placeholder="Email"
+                placeholderTextColor="#52796F"
                 value={email}
                 onChangeText={setEmail}
                 autoCapitalize="none"
@@ -81,6 +82,7 @@ export default function RegisterForm() {
                 <TextInput
                 style={styles.inputWithIcon}
                 placeholder="Password"
+                placeholderTextColor="#52796F"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
@@ -102,6 +104,7 @@ export default function RegisterForm() {
                 <TextInput
                 style={styles.inputWithIcon}
                 placeholder="Confirm your password"
+                placeholderTextColor="#52796F"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry={!showConfirmPassword}
