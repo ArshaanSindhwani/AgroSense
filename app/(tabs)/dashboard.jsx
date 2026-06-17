@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  AppState,
   FlatList,
   StyleSheet,
   Text,
@@ -27,9 +28,11 @@ export default function HomeScreen() {
   const { farms, fields, loading, refresh } = useFarmContext();
 
   const [weather, setWeather] = useState(null);
+  const [weatherMessage, setWeatherMessage] = useState("");
   const [selectedFarm, setSelectedFarm] = useState(null);
   const [selectedField, setSelectedField] = useState(null);
   const [weatherLoading, setWeatherLoading] = useState(false);
+  const [offline, setOffline] = useState(false);
 
   const background = useThemeColor({}, "background");
   const text = useThemeColor({}, "text");
@@ -39,21 +42,57 @@ export default function HomeScreen() {
   const border = useThemeColor({}, "border");
 
   useEffect(() => {
+    let mounted = true;
+    let wasOffline = false;
+
+    async function checkConnection() {
+      const online = await isOnline();
+
+      if (!mounted) return;
+
+      setOffline(!online);
+
+      if (online && wasOffline) {
+        await refresh();
+      }
+
+      wasOffline = !online;
+    }
+
+    checkConnection();
+
+    const interval = setInterval(checkConnection, 3000);
+
+    const subscription = AppState.addEventListener("change", (state) => {
+      if (state === "active") {
+        checkConnection();
+      }
+    });
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+      subscription.remove();
+    };
+  }, [refresh]);
+
+  useEffect(() => {
     if (!farms.length) {
       setSelectedFarm(null);
       setSelectedField(null);
       setWeather(null);
+      setWeatherMessage("");
       return;
     }
 
-    if (!selectedFarm) {
-      const validFarm = farms.find(
-        (farm) => farm.location?.trim()
-      );
+    const selectedStillExists = farms.some(
+      (farm) => farm.id === selectedFarm?.id
+    );
 
-      setSelectedFarm(validFarm || farms[0]);
+    if (!selectedFarm || !selectedStillExists) {
+      setSelectedFarm(farms[0]);
     }
-  }, [farms]);
+  }, [farms, selectedFarm?.id]);
 
   useEffect(() => {
     if (!selectedFarm) {
@@ -65,93 +104,94 @@ export default function HomeScreen() {
       (field) => field.farmId === selectedFarm.id
     );
 
-    if (farmFields.length) {
-      const existingSelectedField = farmFields.find(
-        (field) => field.id === selectedField?.id
-      );
-
-      setSelectedField(existingSelectedField || farmFields[0]);
-    } else {
+    if (!farmFields.length) {
       setSelectedField(null);
+      return;
     }
-  }, [fields, selectedFarm]);
+
+    const selectedStillExists = farmFields.some(
+      (field) => field.id === selectedField?.id
+    );
+
+    if (!selectedField || !selectedStillExists) {
+      setSelectedField(farmFields[0]);
+    }
+  }, [fields, selectedFarm?.id, selectedField?.id]);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function loadWeather() {
       if (!selectedFarm) {
         setWeather(null);
+        setWeatherMessage("");
         return;
       }
 
       const postcode = selectedFarm.location?.trim();
 
       if (!postcode) {
-        console.log(
-          `Skipping weather for ${selectedFarm.name}: missing postcode`
-        );
-
         setWeather(null);
-        setWeatherLoading(false);
-
-        const nextValidFarm = farms.find(
-          (farm) =>
-            farm.id !== selectedFarm.id &&
-            farm.location?.trim()
+        setWeatherMessage(
+          "Weather is unavailable because this farm has no postcode."
         );
+        return;
+      }
 
-        if (nextValidFarm) {
-          setSelectedFarm(nextValidFarm);
-        }
+      const online = await isOnline();
 
+      setOffline(!online);
+
+      if (!online) {
+        setWeather(null);
+        setWeatherMessage("Weather is unavailable offline.");
         return;
       }
 
       setWeatherLoading(true);
+      setWeatherMessage("");
 
       try {
-        const coords =
-          await getCoordinatesFromPostcode(postcode);
+        const coords = await getCoordinatesFromPostcode(postcode);
 
         if (!coords?.latitude || !coords?.longitude) {
           throw new Error("Missing coordinates");
         }
 
-        const data = await getWeatherData(
-          coords.latitude,
-          coords.longitude
-        );
+        const data = await getWeatherData(coords.latitude, coords.longitude);
 
-        setWeather({
-          ...data,
-          place: coords.location || postcode,
-        });
+        if (!cancelled) {
+          setWeather({
+            ...data,
+            place: coords.location || postcode,
+          });
+          setWeatherMessage("");
+        }
       } catch (error) {
-        console.log(
-          `Weather unavailable for ${postcode}:`,
-          error.message
-        );
+        console.log(`Weather unavailable for ${postcode}:`, error.message);
 
-        setWeather(null);
-
-        const nextValidFarm = farms.find(
-          (farm) =>
-            farm.id !== selectedFarm.id &&
-            farm.location?.trim()
-        );
-
-        if (nextValidFarm) {
-          setSelectedFarm(nextValidFarm);
+        if (!cancelled) {
+          setWeather(null);
+          setWeatherMessage("Weather is unavailable for this farm.");
         }
       } finally {
-        setWeatherLoading(false);
+        if (!cancelled) {
+          setWeatherLoading(false);
+        }
       }
     }
 
     loadWeather();
-  }, [selectedFarm, farms]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedFarm?.id]);
 
   async function requireInternet(action) {
     const online = await isOnline();
+
+    setOffline(!online);
 
     if (!online) {
       Alert.alert(
@@ -175,6 +215,8 @@ export default function HomeScreen() {
           style: "destructive",
           onPress: async () => {
             const online = await isOnline();
+
+            setOffline(!online);
 
             if (!online) {
               Alert.alert(
@@ -205,18 +247,13 @@ export default function HomeScreen() {
   function getSelectedFarmFields() {
     if (!selectedFarm) return [];
 
-    return fields.filter(
-      (field) => field.farmId === selectedFarm.id
-    );
+    return fields.filter((field) => field.farmId === selectedFarm.id);
   }
 
   if (loading) {
     return (
-      <View style={styles.centred, { backgroundColor: background }}>
-        <ActivityIndicator
-          size="large"
-          color={primary}
-        />
+      <View style={[styles.centred, { backgroundColor: background }]}>
+        <ActivityIndicator size="large" color={primary} />
       </View>
     );
   }
@@ -231,11 +268,75 @@ export default function HomeScreen() {
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           <>
-            <WeatherCard weather={weather} loading={weatherLoading} />
+            {offline && (
+              <View
+                style={[
+                  styles.offlineBanner,
+                  {
+                    backgroundColor: card,
+                    borderColor: border,
+                  },
+                ]}
+              >
+                <View style={[styles.offlineIcon, { backgroundColor: primary }]}>
+                  <Ionicons
+                    name="cloud-offline-outline"
+                    size={30}
+                    color="#FFFFFF"
+                  />
+                </View>
 
-            <FieldLocationMap field={selectedField} />
+                <View style={styles.offlineContent}>
+                  <Text style={[styles.offlineTitle, { color: text }]}>
+                    You are offline
+                  </Text>
 
-            {selectedFarmFields.length > 1 && (
+                  <Text style={[styles.offlineText, { color: mutedText }]}>
+                    Weather and map data are unavailable until you reconnect.
+                  </Text>
+                </View>
+              </View>
+            )}
+
+            {offline ? (
+              <>
+                <UnavailableCard
+                  icon="rainy-outline"
+                  title="Weather unavailable"
+                  message="Connect to the internet to view local weather for your farm."
+                  backgroundColor={card}
+                  borderColor={border}
+                  iconColor={primary}
+                  textColor={text}
+                  mutedColor={mutedText}
+                />
+
+                <UnavailableCard
+                  icon="map-outline"
+                  title="Field Map unavailable"
+                  message="Connect to the internet to view your field location on the map."
+                  backgroundColor={card}
+                  borderColor={border}
+                  iconColor={primary}
+                  textColor={text}
+                  mutedColor={mutedText}
+                />
+              </>
+            ) : (
+              <>
+                <WeatherCard weather={weather} loading={weatherLoading} />
+
+                {!!weatherMessage && (
+                  <Text style={[styles.statusMessage, { color: mutedText }]}>
+                    {weatherMessage}
+                  </Text>
+                )}
+
+                <FieldLocationMap field={selectedField} />
+              </>
+            )}
+
+            {selectedFarmFields.length > 1 && !offline && (
               <>
                 <Text style={[styles.subheading, { color: text }]}>
                   Map Field
@@ -262,9 +363,12 @@ export default function HomeScreen() {
                       <Text
                         style={[
                           styles.fieldChipText,
-                          { color: text },
-                          selectedField?.id === item.id &&
-                          styles.fieldChipTextSelected,
+                          {
+                            color:
+                              selectedField?.id === item.id
+                                ? "#FFFFFF"
+                                : text,
+                          },
                         ]}
                       >
                         {item.name}
@@ -304,6 +408,43 @@ export default function HomeScreen() {
   );
 }
 
+function UnavailableCard({
+  icon,
+  title,
+  message,
+  backgroundColor,
+  borderColor,
+  iconColor,
+  textColor,
+  mutedColor,
+}) {
+  return (
+    <View
+      style={[
+        styles.unavailableCard,
+        {
+          backgroundColor,
+          borderColor,
+        },
+      ]}
+    >
+      <View style={[styles.unavailableIcon, { backgroundColor: iconColor }]}>
+        <Ionicons name={icon} size={26} color="#FFFFFF" />
+      </View>
+
+      <View style={styles.unavailableTextContainer}>
+        <Text style={[styles.unavailableTitle, { color: textColor }]}>
+          {title}
+        </Text>
+
+        <Text style={[styles.unavailableText, { color: mutedColor }]}>
+          {message}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -318,11 +459,73 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.subtitle,
     fontWeight: "700",
     marginBottom: theme.spacing.sm,
+    marginTop: theme.spacing.md,
   },
   subheading: {
     fontSize: theme.fontSize.body,
     fontWeight: "700",
     marginBottom: theme.spacing.sm,
+  },
+  offlineBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+  },
+  offlineIcon: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: theme.spacing.md,
+  },
+  offlineContent: {
+    flex: 1,
+  },
+  offlineTitle: {
+    fontSize: theme.fontSize.subtitle,
+    fontWeight: "700",
+    marginBottom: 4,
+  },
+  offlineText: {
+    fontSize: theme.fontSize.body,
+    lineHeight: 20,
+  },
+  unavailableCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+  },
+  unavailableIcon: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: theme.spacing.md,
+  },
+  unavailableTextContainer: {
+    flex: 1,
+  },
+  unavailableTitle: {
+    fontSize: theme.fontSize.body,
+    fontWeight: "700",
+    marginBottom: 4,
+  },
+  unavailableText: {
+    fontSize: theme.fontSize.body,
+    lineHeight: 20,
+  },
+  statusMessage: {
+    fontSize: theme.fontSize.small,
+    marginBottom: theme.spacing.sm,
+    textAlign: "center",
   },
   list: {
     paddingBottom: 100,
@@ -337,16 +540,9 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
     marginRight: theme.spacing.sm,
   },
-  fieldChipSelected: {
-    backgroundColor: theme.colours.primary,
-    borderColor: theme.colours.primary,
-  },
   fieldChipText: {
     fontSize: theme.fontSize.small,
     fontWeight: "600",
-  },
-  fieldChipTextSelected: {
-    color: "#FFFFFF",
   },
   empty: {
     textAlign: "center",
