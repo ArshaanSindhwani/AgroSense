@@ -20,6 +20,7 @@ import { WeatherCard } from "../../components/cards/WeatherCard";
 import { FarmCard } from "../../components/cards/FarmCard";
 import FieldLocationMap from "../../components/maps/FieldLocationMap";
 import { isOnline } from "../../services/offline/networkStatus";
+import { useThemeColor } from "../../hooks/useThemeColor";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -29,6 +30,13 @@ export default function HomeScreen() {
   const [selectedFarm, setSelectedFarm] = useState(null);
   const [selectedField, setSelectedField] = useState(null);
   const [weatherLoading, setWeatherLoading] = useState(false);
+
+  const background = useThemeColor({}, "background");
+  const text = useThemeColor({}, "text");
+  const mutedText = useThemeColor({}, "mutedText");
+  const primary = useThemeColor({}, "primary");
+  const card = useThemeColor({}, "card");
+  const border = useThemeColor({}, "border");
 
   useEffect(() => {
     if (!farms.length) {
@@ -204,10 +212,10 @@ export default function HomeScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centred}>
+      <View style={styles.centred, { backgroundColor: background }}>
         <ActivityIndicator
           size="large"
-          color={theme.colours.primary}
+          color={primary}
         />
       </View>
     );
@@ -216,23 +224,20 @@ export default function HomeScreen() {
   const selectedFarmFields = getSelectedFarmFields();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: background }]}>
       <FlatList
         data={farms}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         ListHeaderComponent={
           <>
-            <WeatherCard
-              weather={weather}
-              loading={weatherLoading}
-            />
+            <WeatherCard weather={weather} loading={weatherLoading} />
 
             <FieldLocationMap field={selectedField} />
 
             {selectedFarmFields.length > 1 && (
               <>
-                <Text style={styles.subheading}>
+                <Text style={[styles.subheading, { color: text }]}>
                   Map Field
                 </Text>
 
@@ -246,19 +251,20 @@ export default function HomeScreen() {
                     <TouchableOpacity
                       style={[
                         styles.fieldChip,
-                        selectedField?.id === item.id &&
-                          styles.fieldChipSelected,
+                        { backgroundColor: card, borderColor: border },
+                        selectedField?.id === item.id && {
+                          backgroundColor: primary,
+                          borderColor: primary,
+                        },
                       ]}
-                      onPress={() =>
-                        setSelectedField(item)
-                      }
+                      onPress={() => setSelectedField(item)}
                     >
                       <Text
                         style={[
                           styles.fieldChipText,
+                          { color: text },
                           selectedField?.id === item.id &&
-                            styles
-                              .fieldChipTextSelected,
+                          styles.fieldChipTextSelected,
                         ]}
                       >
                         {item.name}
@@ -269,46 +275,30 @@ export default function HomeScreen() {
               </>
             )}
 
-            <Text style={styles.heading}>
-              Your Farms
-            </Text>
+            <Text style={[styles.heading, { color: text }]}>Your Farms</Text>
           </>
         }
         renderItem={({ item }) => (
           <FarmCard
             farm={item}
-            selected={
-              selectedFarm?.id === item.id
-            }
-            onSelect={() =>
-              setSelectedFarm(item)
-            }
-            onDelete={() =>
-              confirmDeleteFarm(item)
-            }
+            selected={selectedFarm?.id === item.id}
+            onSelect={() => setSelectedFarm(item)}
+            onDelete={() => confirmDeleteFarm(item)}
           />
         )}
         ListEmptyComponent={
-          <Text style={styles.empty}>
+          <Text style={[styles.empty, { color: mutedText }]}>
             No farms yet. Tap + to add one.
           </Text>
         }
       />
 
       <TouchableOpacity
-        style={styles.fab}
-        onPress={() =>
-          requireInternet(() =>
-            router.push("/add-farm")
-          )
-        }
+        style={[styles.fab, { backgroundColor: primary }]}
+        onPress={() => requireInternet(() => router.push("/add-farm"))}
         activeOpacity={0.85}
       >
-        <Ionicons
-          name="add"
-          size={28}
-          color="#FFFFFF"
-        />
+        <Ionicons name="add" size={28} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );
@@ -317,7 +307,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colours.background,
     padding: theme.spacing.md,
   },
   centred: {
@@ -328,13 +317,11 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: theme.fontSize.subtitle,
     fontWeight: "700",
-    color: theme.colours.text,
     marginBottom: theme.spacing.sm,
   },
   subheading: {
     fontSize: theme.fontSize.body,
     fontWeight: "700",
-    color: theme.colours.text,
     marginBottom: theme.spacing.sm,
   },
   list: {
@@ -344,9 +331,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   fieldChip: {
-    backgroundColor: theme.colours.card,
     borderWidth: 1,
-    borderColor: theme.colours.border,
     borderRadius: theme.radius.lg,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
@@ -357,7 +342,6 @@ const styles = StyleSheet.create({
     borderColor: theme.colours.primary,
   },
   fieldChipText: {
-    color: theme.colours.text,
     fontSize: theme.fontSize.small,
     fontWeight: "600",
   },
@@ -366,7 +350,6 @@ const styles = StyleSheet.create({
   },
   empty: {
     textAlign: "center",
-    color: theme.colours.mutedText,
     marginTop: theme.spacing.xl,
   },
   fab: {
@@ -376,7 +359,6 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: theme.colours.primary,
     alignItems: "center",
     justifyContent: "center",
     elevation: 4,
