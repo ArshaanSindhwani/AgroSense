@@ -2,7 +2,7 @@ import React from "react";
 import { render as rtlRender, screen, waitFor, userEvent } from "@testing-library/react-native";
 import { Alert } from "react-native";
 
-import AddFarmScreen from "../../app/(tabs)/addFarm";
+import AddFarmScreen from "../../app/add-farm";
 import { ThemeProvider } from "../../context/ThemeContext";
 
 const render = (component) => rtlRender(component, { wrapper: ThemeProvider });
