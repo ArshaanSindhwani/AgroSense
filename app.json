@@ -2,7 +2,7 @@
   "expo": {
     "owner": "projectgamma",
     "name": "AgroSense",
-    "slug": "agrosense",
+    "slug": "project-gamma",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
