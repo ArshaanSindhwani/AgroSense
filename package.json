@@ -9,7 +9,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "coverage": "jest --coverage --testPathPattern=/unit/recommendations.test.jsx",
+    "coverage": "jest --coverage --testPathPattern=/unit/",
     "unitTests": "jest --testPathPattern=/unit/ --watchAll --verbose"
   },
   "dependencies": {
