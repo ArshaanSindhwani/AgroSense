@@ -313,7 +313,7 @@ export default function RecommendationsScreen() {
                     { backgroundColor: card, borderColor: border },
                   ]}
                 >
-                  <Text style={[styles.historyTitle, { color: text }]}>
+                  <Text aria-label="recFieldName" style={[styles.historyTitle, { color: text }]}>
                     {item.fieldName || "Field recommendation"}
                   </Text>
 
