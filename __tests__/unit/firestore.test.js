@@ -2,7 +2,8 @@ import {
   addFarm, getFarmsByUser,
   addField, deleteField, getFieldsByFarmIds, getField, updateField,
   addObs, deleteObs, getObs, updateObs,
-  addRecommendation, getFieldRecommendations,
+  addRecommendation, getFieldRecommendations, getRecommendations,
+  getItemTime
 } from "../../services/firebase/firestore";
 
 // ─── Mock setup ──────────────────────────────────────────────────────────────
@@ -269,5 +270,35 @@ describe("getFieldRecommendations", () => {
     const result = await getFieldRecommendations("field-1");
 
     expect(result).toEqual([]);
+  });
+});
+
+// ─── getItemTime ─────────────────────────────────────────────────
+describe('getItemTime', () => {
+  it('returns createdAt.seconds * 1000 when the Firestore Timestamp form is present', () => {
+    expect(getItemTime({ createdAt: { seconds: 1_700_000_000 } })).toBe(1_700_000_000_000);
+  });
+
+  it('prefers createdAt.seconds over a plain createdAt string', () => {
+    // Both fields present – seconds wins
+    expect(getItemTime({ createdAt: { seconds: 1000 }, recordedAt: '2020-01-01' })).toBe(1_000_000);
+  });
+
+  it('falls back to parsing createdAt as a date string when seconds is absent', () => {
+    const iso = '2024-03-15T10:00:00.000Z';
+    expect(getItemTime({ createdAt: iso })).toBe(new Date(iso).getTime());
+  });
+
+  it('falls back to recordedAt when createdAt is absent', () => {
+    const iso = '2023-06-01T00:00:00.000Z';
+    expect(getItemTime({ recordedAt: iso })).toBe(new Date(iso).getTime());
+  });
+
+  it('returns 0 when neither createdAt nor recordedAt is present', () => {
+    expect(getItemTime({})).toBe(0);
+  });
+
+  it('returns 0 for a fully empty item', () => {
+    expect(getItemTime({ userId: 'u1', fieldId: 'f1' })).toBe(0);
   });
 });
