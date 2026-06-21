@@ -40,6 +40,16 @@ Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncSt
 - Firebase Authentication
 - Firestore database integration
 
+## User Workflow
+
+1. Register and create an account
+2. Add a farm using a UK postcode
+3. Create fields and assign crop information
+4. Record observations including growth stage, pests, and soil conditions
+5. View weather information for field locations
+6. Generate AI-powered farming recommendations
+7. Review recommendation history and field performance
+
 ## Architecture
 
 ```text
@@ -54,31 +64,3 @@ Weather API
 Gemini AI
       ↓
 AsyncStorage Offline Storage
-```
-
-## My Contribution
-
-I contributed to the development and debugging of the AgroSense mobile application, with a focus on offline-first functionality, Firebase integration, dashboard behaviour, weather and map fallback logic, route handling, and technical presentation preparation.
-
-I also worked on documenting and explaining the AI integration, weather API integration, OpenStreetMap implementation, and offline synchronisation architecture.
-
-## Screenshots
-
-Screenshots coming soon.
-
-## What I Learned
-
-- Mobile application development with React Native
-- Firebase Authentication and Firestore integration
-- AI integration using Gemini
-- Offline-first application architecture
-- API integration and data handling
-- OpenStreetMap implementation
-- Agile team collaboration
-
-## Future Improvements
-
-- Enhanced analytics dashboard
-- Improved offline conflict resolution
-- Additional AI recommendation capabilities
-- Advanced farm performance reporting
