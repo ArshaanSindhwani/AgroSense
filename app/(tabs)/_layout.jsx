@@ -1,0 +1,81 @@
+import { Tabs, Redirect } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { useAuthContext } from "../../context/AuthContext";
+import {COLOURS} from "../../constants/colours"
+import { NetworkIndicator } from "../../components/shared/NetworkIndicator";
+
+export default function TabsLayout() {
+  const { user, loading } = useAuthContext();
+  if (loading) return null;
+  if (!user) return <Redirect href="/(auth)/login" />;
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: true,
+        headerStyle: { backgroundColor: COLOURS.light.primary },
+        headerTintColor: "#FFFFFF",
+        headerTitleAlign: "center",
+        headerTitleStyle: { fontWeight: "700" },
+        headerRight: () => <NetworkIndicator />,
+        tabBarActiveTintColor: COLOURS.light.primary,
+        tabBarInactiveTintColor: COLOURS.light.mutedText,
+        tabBarStyle: {
+          backgroundColor: COLOURS.light.card,
+          borderTopColor: COLOURS.light.border,
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: "Home",
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="grid-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="fields"
+        options={{
+          title: "Fields",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="leaf-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="observations"
+        options={{
+          title: "Observations",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="clipboard-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="recommendations"
+        options={{
+          title: "Suggestions",
+          tabBarLabel: "Advice",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bulb-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={size} color={color} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}
