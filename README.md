@@ -1,6 +1,6 @@
 # AgroSense
 
-> Developed as part of a team project at La Fosse Academy.
+> Developed as part of a multidisciplinary team project at La Fosse Academy, with contributions focused on offline-first functionality, Firebase integration, AI-powered recommendations, and technical documentation.
 
 AgroSense is an AI-powered mobile agriculture platform designed to help small farms make data-driven decisions through field observations, weather insights, and intelligent recommendations.
 
