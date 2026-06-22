@@ -1,11 +1,10 @@
 # AgroSense
 
 > Developed as part of a multidisciplinary team project at La Fosse Academy, with contributions focused on offline-compatible functionality, Firebase integration, AI-powered recommendations, and technical documentation.
-> Developed as part of a multidisciplinary team project at La Fosse Academy, with contributions focused on offline-compatible functionality, Firebase integration, AI-powered recommendations, and technical documentation.
 
 AgroSense is an AI-powered mobile agriculture platform designed to help small farms make data-driven decisions through field observations, weather insights, and intelligent recommendations.
 
-Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncStorage, and REST APIs, the application supports offline-compatible functionality for users operating in rural areas with limited connectivity.
+Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncStorage, and REST APIs, the application enables users to continue recording observations in low-connectivity environments while automatically synchronising data when connectivity is restored.
 
 ## Technologies
 
@@ -26,7 +25,7 @@ Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncSt
 - Gemini AI
 - Open-Meteo Weather API
 - OpenStreetMap
-- Postcodes.io
+- Postcodes.io API
 
 ### Development
 
@@ -38,10 +37,10 @@ Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncSt
 
 - AI-powered farming recommendations
 - Offline-compatible observation recording
-- Automatic synchronisation when connectivity returns
-- Weather integration
-- Interactive field mapping
-- Observation tracking
+- Automatic data synchronisation when connectivity returns
+- Weather integration based on farm location
+- Interactive field mapping with OpenStreetMap
+- Observation tracking and history
 - Recommendation history
 - Firebase Authentication
 - Firestore database integration
@@ -54,7 +53,7 @@ Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncSt
 3. Create fields and assign crop information
 4. Record observations including growth stage, pests, and soil conditions
 5. View weather information for field locations
-6. Generate AI-powered farming recommendations
+6. Generate AI-powered recommendations
 7. Review recommendation history and field performance
 
 ## Architecture
@@ -66,7 +65,7 @@ Firebase Authentication
       ↓
 Firestore Database
       ↓
-Weather API
+Open-Meteo Weather API
       ↓
 Gemini AI
       ↓
@@ -81,29 +80,17 @@ I also worked on documenting and explaining the AI integration, weather API inte
 
 ## Screenshots
 
-### Login
+<p align="center">
+  <img src="screenshots/login.jpg" width="220">
+  <img src="screenshots/dashboard.jpg" width="220">
+  <img src="screenshots/fields.jpg" width="220">
+</p>
 
-![Login Screen](screenshots/login.jpg)
-
-### Dashboard
-
-![Dashboard](screenshots/dashboard.jpg)
-
-### Fields
-
-![Fields](screenshots/fields.jpg)
-
-### Observations
-
-![Observations](screenshots/observations.jpg)
-
-### AI Recommendations
-
-![AI Recommendations](screenshots/recommendations.jpg)
-
-### Offline-Compatible Functionality
-
-![Offline-Compatible Functionality](screenshots/offline-compatible.jpg)
+<p align="center">
+  <img src="screenshots/observations.jpg" width="220">
+  <img src="screenshots/recommendations.jpg" width="220">
+  <img src="screenshots/offline-compatible.jpg" width="220">
+</p>
 
 ## What I Learned
 
