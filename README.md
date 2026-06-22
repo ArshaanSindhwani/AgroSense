@@ -4,7 +4,7 @@
 
 AgroSense is an AI-powered mobile agriculture platform designed to help small farms make data-driven decisions through field observations, weather insights, and intelligent recommendations.
 
-Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncStorage, and REST APIs, the application enables users to continue recording observations in low-connectivity environments while automatically synchronising data when connectivity is restored.
+Built using React Native, Expo, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncStorage, and REST APIs, the application enables users to continue recording observations in low-connectivity environments while automatically synchronising data when connectivity is restored.
 
 ## Technologies
 
@@ -45,6 +45,7 @@ Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncSt
 - Firebase Authentication
 - Firestore database integration
 - Theme customisation
+- Safe fallback handling for unavailable weather or map data
 
 ## User Workflow
 
@@ -80,17 +81,41 @@ I also worked on documenting and explaining the AI integration, weather API inte
 
 ## Screenshots
 
-<p align="center">
-  <img src="screenshots/login.jpg" width="220">
-  <img src="screenshots/dashboard.jpg" width="220">
-  <img src="screenshots/fields.jpg" width="220">
-</p>
+### Login
 
-<p align="center">
-  <img src="screenshots/observations.jpg" width="220">
-  <img src="screenshots/recommendations.jpg" width="220">
-  <img src="screenshots/offline-compatible.jpg" width="220">
-</p>
+<img src="screenshots/login.jpg" alt="Login Screen" width="250">
+
+Secure user authentication using Firebase Authentication.
+
+### Dashboard
+
+<img src="screenshots/dashboard.jpg" alt="Dashboard" width="250">
+
+Overview of farms, weather insights, and key farming information.
+
+### Fields
+
+<img src="screenshots/fields.jpg" alt="Fields" width="250">
+
+Manage fields, crop information, and location data.
+
+### Observations
+
+<img src="screenshots/observations.jpg" alt="Observations" width="250">
+
+Record and review field observations, growth stages, and conditions.
+
+### AI Recommendations
+
+<img src="screenshots/recommendations.jpg" alt="AI Recommendations" width="250">
+
+Generate AI-powered farming recommendations using Gemini AI.
+
+### Offline-Compatible Functionality
+
+<img src="screenshots/offline-compatible.jpg" alt="Offline-Compatible Functionality" width="250">
+
+Continue working without connectivity and synchronise data when a connection is restored.
 
 ## What I Learned
 
@@ -101,6 +126,7 @@ I also worked on documenting and explaining the AI integration, weather API inte
 - API integration and data handling
 - OpenStreetMap implementation using WebView
 - State management and navigation with Expo Router
+- Defensive UI handling for unavailable external API data
 - Agile team collaboration and technical presentation delivery
 
 ## Future Improvements
