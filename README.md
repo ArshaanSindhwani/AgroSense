@@ -81,41 +81,42 @@ I also worked on documenting and explaining the AI integration, weather API inte
 
 ## Screenshots
 
-### Login
-
-<img src="screenshots/login.jpg" alt="Login Screen" width="250">
-
-Secure user authentication using Firebase Authentication.
-
-### Dashboard
-
-<img src="screenshots/dashboard.jpg" alt="Dashboard" width="250">
-
-Overview of farms, weather insights, and key farming information.
-
-### Fields
-
-<img src="screenshots/fields.jpg" alt="Fields" width="250">
-
-Manage fields, crop information, and location data.
-
-### Observations
-
-<img src="screenshots/observations.jpg" alt="Observations" width="250">
-
-Record and review field observations, growth stages, and conditions.
-
-### AI Recommendations
-
-<img src="screenshots/recommendations.jpg" alt="AI Recommendations" width="250">
-
-Generate AI-powered farming recommendations using Gemini AI.
-
-### Offline-Compatible Functionality
-
-<img src="screenshots/offline-compatible.jpg" alt="Offline-Compatible Functionality" width="250">
-
-Continue working without connectivity and synchronise data when a connection is restored.
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <strong>Login</strong><br><br>
+      <img src="screenshots/login.jpg" width="220"><br><br>
+      Secure user authentication using Firebase Authentication.
+    </td>
+    <td align="center" width="33%">
+      <strong>Dashboard</strong><br><br>
+      <img src="screenshots/dashboard.jpg" width="220"><br><br>
+      Overview of farms, weather insights, and key farming information.
+    </td>
+    <td align="center" width="33%">
+      <strong>Fields</strong><br><br>
+      <img src="screenshots/fields.jpg" width="220"><br><br>
+      Manage fields, crop information, and location data.
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <strong>Observations</strong><br><br>
+      <img src="screenshots/observations.jpg" width="220"><br><br>
+      Record and review field observations, growth stages, and conditions.
+    </td>
+    <td align="center" width="33%">
+      <strong>AI Recommendations</strong><br><br>
+      <img src="screenshots/recommendations.jpg" width="220"><br><br>
+      Generate AI-powered farming recommendations using Gemini AI.
+    </td>
+    <td align="center" width="33%">
+      <strong>Offline-Compatible Functionality</strong><br><br>
+      <img src="screenshots/offline-compatible.jpg" width="220"><br><br>
+      Continue working without connectivity and synchronise data when a connection is restored.
+    </td>
+  </tr>
+</table>
 
 ## What I Learned
 
