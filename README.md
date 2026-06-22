@@ -1,10 +1,10 @@
 # AgroSense
 
-> Developed as part of a multidisciplinary team project at La Fosse Academy, with contributions focused on offline-first functionality, Firebase integration, AI-powered recommendations, and technical documentation.
+> Developed as part of a multidisciplinary team project at La Fosse Academy, with contributions focused on offline-compatible functionality, Firebase integration, AI-powered recommendations, and technical documentation.
 
 AgroSense is an AI-powered mobile agriculture platform designed to help small farms make data-driven decisions through field observations, weather insights, and intelligent recommendations.
 
-Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncStorage, and REST APIs, the application focuses on offline-first functionality for users operating in rural areas with limited connectivity.
+Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncStorage, and REST APIs, the application enables users to record observations in low-connectivity environments while automatically synchronising data when connectivity is restored.
 
 ## Technologies
 
@@ -20,8 +20,9 @@ Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncSt
 
 ### APIs & Integrations
 - Gemini AI
-- Weather API
+- Open-Meteo API
 - OpenStreetMap
+- Postcodes.io API
 
 ### Development
 - Git
@@ -30,12 +31,12 @@ Built using React Native, Firebase, Firestore, OpenStreetMap, Gemini AI, AsyncSt
 
 ## Key Features
 
-- AI-generated farming recommendations
-- Offline-first synchronisation
-- Automatic sync when connectivity returns
-- Weather integration
-- Interactive field mapping
-- Observation tracking
+- AI-powered farming recommendations
+- Offline-compatible observation recording
+- Automatic data synchronisation when connectivity returns
+- Weather integration based on farm location
+- Interactive field mapping with OpenStreetMap
+- Observation tracking and history
 - Recommendation history
 - Firebase Authentication
 - Firestore database integration
@@ -63,4 +64,4 @@ Weather API
       ↓
 Gemini AI
       ↓
-AsyncStorage Offline Storage
+AsyncStorage
